@@ -1,0 +1,433 @@
+/**
+ * Selfcare Diagnostics - Component Library Stylesheet
+ * File: assets/css/components.css
+ * UI Elements: Buttons, Cards, Badges, Tube Indicators, Forms, Modals, Banners & Widgets
+ */
+
+/* ==========================================
+   1. BUTTONS & INTERACTIVE CONTROLS
+   ========================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  user-select: none;
+  min-height: var(--min-touch-target);
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled, .btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Button Variants */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+  box-shadow: 0 2px 4px rgba(14, 184, 133, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  color: var(--white);
+  box-shadow: 0 4px 8px rgba(14, 184, 133, 0.35);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--white);
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary-light);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--border-color-hover);
+  color: var(--text-main);
+}
+
+.btn-outline:hover {
+  background-color: var(--bg-app);
+  border-color: var(--text-subtle);
+}
+
+.btn-outline-primary {
+  background-color: transparent;
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-light);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: var(--white);
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  border-radius: var(--radius-sm);
+  min-height: 36px;
+}
+
+.btn-lg {
+  padding: 0.875rem 1.75rem;
+  font-size: 1.05rem;
+  border-radius: var(--radius-lg);
+  min-height: 52px;
+}
+
+.btn-block {
+  width: 100%;
+  display: flex;
+}
+
+/* ==========================================
+   2. CARDS & CONTAINER BOXES
+   ========================================== */
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-color-hover);
+}
+
+.card-header {
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--white);
+}
+
+.card-body {
+  padding: var(--space-lg);
+}
+
+.card-footer {
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-app);
+}
+
+/* Specialized Diagnostic Cards */
+.test-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 4px solid var(--primary);
+}
+
+.package-card {
+  border: 1px solid var(--primary-subtle);
+  background: linear-gradient(180deg, var(--white) 0%, var(--primary-light) 100%);
+}
+
+.package-card.featured {
+  border: 2px solid var(--primary);
+  box-shadow: var(--shadow-floating);
+}
+
+/* ==========================================
+   3. BADGES, TAGS & SAMPLE TUBE INDICATORS
+   ========================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+  line-height: 1;
+}
+
+.badge-primary {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-success {
+  background-color: var(--success-soft);
+  color: var(--success);
+}
+
+.badge-warning {
+  background-color: var(--warning-soft);
+  color: #b45309;
+}
+
+.badge-danger {
+  background-color: var(--danger-soft);
+  color: var(--danger);
+}
+
+.badge-info {
+  background-color: var(--info-soft);
+  color: #0891b2;
+}
+
+.badge-neutral {
+  background-color: var(--bg-app);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+/* Sample Tube Colors (Diagnostic Standard) */
+.tube-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-medium);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-app);
+}
+
+.tube-cap {
+  width: 10px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+.tube-purple .tube-cap { background-color: var(--tube-purple); }
+.tube-grey .tube-cap { background-color: var(--tube-grey); }
+.tube-yellow .tube-cap { background-color: var(--tube-yellow); }
+.tube-red .tube-cap { background-color: var(--tube-red); }
+.tube-blue .tube-cap { background-color: var(--tube-blue); }
+
+/* ==========================================
+   4. FORMS & INPUT CONTROLS
+   ========================================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.form-label {
+  font-size: 0.84375rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-main);
+}
+
+.form-control, .form-select {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-lg);
+  font-size: 0.9375rem;
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(14, 184, 133, 0.15);
+}
+
+.form-control::placeholder {
+  color: var(--text-subtle);
+}
+
+/* Search Bar Component */
+.search-input-group {
+  position: relative;
+  width: 100%;
+}
+
+.search-input-group .form-control {
+  padding-left: 2.75rem;
+  padding-right: 2.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--bg-app);
+  border-color: transparent;
+}
+
+.search-input-group .form-control:focus {
+  background-color: var(--white);
+  border-color: var(--primary);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-subtle);
+  pointer-events: none;
+}
+
+/* ==========================================
+   5. BANNERS & PROMOTIONAL WIDGETS
+   ========================================== */
+.health-camp-banner {
+  background: linear-gradient(135deg, #0eb885 0%, #065f46 100%);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.health-camp-banner::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.health-camp-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+}
+
+/* ==========================================
+   6. MODAL & DIALOG OVERLAYS
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background-color: var(--white);
+  border-radius: var(--radius-xl);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-floating);
+  transform: translateY(16px);
+  transition: transform 0.2s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+
+/* ==========================================
+   7. FLOATING ACTION BUTTON (FAB) & AI ASSISTANT
+   ========================================== */
+.fab-ai-assistant {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-height) + 16px);
+  right: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-blue) 100%);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(14, 184, 133, 0.4);
+  z-index: 800;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fab-ai-assistant:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 24px rgba(14, 184, 133, 0.5);
+}
+
+/* ==========================================
+   8. LOADING SPINNERS & SKELETON LOADERS
+   ========================================== */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--primary-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
