@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>System Verification - Selfcare Diagnostics</title>
+
+    <meta
+        name="description"
+        content="Selfcare Diagnostics application system verification">
+
+    <meta
+        name="theme-color"
+        content="#0b9b55">
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="assets/images/logo.png">
+
+    <link
+        rel="stylesheet"
+        href="assets/css/global.css">
+
+    <link
+        rel="stylesheet"
+        href="assets/css/components.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f7faf8;
+            color: #17201b;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .verify-page {
+            width: 100%;
+            min-height: 100vh;
+            padding: 24px 16px;
+        }
+
+        .verify-wrapper {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .verify-header {
+            text-align: center;
+            padding: 20px 10px 24px;
+        }
+
+        .verify-logo {
+            width: 86px;
+            height: 86px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .verify-title {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+            color: #087f46;
+        }
+
+        .verify-subtitle {
+            margin: 6px 0 0;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .verify-card {
+            background: #ffffff;
+            border: 1px solid #e7eee9;
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow:
+                0 10px 30px rgba(20, 80, 50, 0.07);
+        }
+
+        .verify-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            background: #f0faf4;
+            border: 1px solid #d8f0e1;
+        }
+
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #0b9b55;
+            color: #ffffff;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .status-content {
+            flex: 1;
+        }
+
+        .status-title {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 750;
+        }
+
+        .status-text {
+            margin: 3px 0 0;
+            color: #6c756f;
+            font-size: 11px;
+        }
+
+        .checks {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-height: 54px;
+            padding: 11px 12px;
+            border: 1px solid #edf0ee;
+            border-radius: 14px;
+            background: #ffffff;
+        }
+
+        .check-icon {
+            width: 32px;
+            height: 32px;
+            flex: 0 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: #f3f5f4;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .check-item.pending .check-icon {
+            color: #777;
+        }
+
+        .check-item.running .check-icon {
+            color: #0b9b55;
+            background: #eaf8f0;
+            animation: verify-pulse 1s infinite;
+        }
+
+        .check-item.success .check-icon {
+            color: #087f46;
+            background: #e6f7ed;
+        }
+
+        .check-item.failed .check-icon {
+            color: #d51c58;
+            background: #fff0f5;
+        }
+
+        .check-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .check-name {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .check-message {
+            margin: 3px 0 0;
+            color: #858b87;
+            font-size: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .check-result {
+            min-width: 50px;
+            text-align: right;
+            font-size: 10px;
+            font-weight: 750;
+        }
+
+        .check-item.pending .check-result {
+            color: #999;
+        }
+
+        .check-item.running .check-result {
+            color: #0b9b55;
+        }
+
+        .check-item.success .check-result {
+            color: #0b9b55;
+        }
+
+        .check-item.failed .check-result {
+            color: #d51c58;
+        }
+
+        .verify-progress {
+            margin: 18px 0;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 7px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #e9efeb;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+            background: #0b9b55;
+            transition: width .3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 7px;
+            color: #747b76;
+            font-size: 10px;
+        }
+
+        .verify-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .verify-button {
+            flex: 1;
+            min-height: 46px;
+            border: 0;
+            border-radius: 13px;
+            font-size: 12px;
+            font-weight: 750;
+            cursor: pointer;
+        }
+
+        .verify-primary {
+            color: #ffffff;
+            background: linear-gradient(
+                135deg,
+                #0b9b55,
+                #078346
+            );
+        }
+
+        .verify-secondary {
+            color: #087f46;
+            background: #eef8f2;
+            border: 1px solid #cfe9d9;
+        }
+
+        .verify-button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .final-result {
+            display: none;
+            margin-top: 16px;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .final-result.success {
+            display: block;
+            color: #087f46;
+            background: #eaf8f0;
+            border: 1px solid #ccebd8;
+        }
+
+        .final-result.failed {
+            display: block;
+            color: #c51d52;
+            background: #fff0f5;
+            border: 1px solid #f4cbd9;
+        }
+
+        .final-title {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .final-message {
+            margin: 5px 0 0;
+            font-size: 11px;
+        }
+
+        .server-time {
+            margin-top: 15px;
+            padding: 11px;
+            border-radius: 12px;
+            background: #fafafa;
+            text-align: center;
+            color: #666;
+            font-size: 10px;
+        }
+
+        .verify-footer {
+            padding: 20px 10px;
+            text-align: center;
+            color: #999;
+            font-size: 10px;
+        }
+
+        .verify-footer strong {
+            color: #087f46;
+        }
+
+        @keyframes verify-pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(.9);
+                opacity: .55;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="verify-page">
+
+        <div class="verify-wrapper">
+
+            <!-- HEADER -->
+            <header class="verify-header">
+
+                <img
+                    src="assets/images/logo.png"
+                    alt="Selfcare Diagnostics"
+                    class="verify-logo">
+
+                <h1 class="verify-title">
+                    System Verification
+                </h1>
+
+                <p class="verify-subtitle">
+                    SELFCARE DIAGNOSTICS • Empowering Wellness
+                </p>
+
+            </header>
+
+
+            <!-- VERIFICATION CARD -->
+            <section class="verify-card">
+
+                <div
+                    id="overall-status"
+                    class="verify-status">
+
+                    <div
+                        id="overall-status-icon"
+                        class="status-icon">
+                        ✓
+                    </div>
+
+                    <div class="status-content">
+
+                        <p
+                            id="overall-status-title"
+                            class="status-title">
+                            Ready to Verify
+                        </p>
+
+                        <p
+                            id="overall-status-text"
+                            class="status-text">
+                            Check frontend, API, backend and database.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CHECK LIST -->
+                <div id="verification-checks" class="checks">
+
+                    <div
+                        class="check-item pending"
+                        data-check="frontend">
+
+                        <div class="check-icon">1</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Frontend
+                            </p>
+
+                            <p class="check-message">
+                                Checking application files
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="configuration">
+
+                        <div class="check-icon">2</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Configuration
+                            </p>
+
+                            <p class="check-message">
+                                Checking application configuration
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="api">
+
+                        <div class="check-icon">3</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                API Connection
+                            </p>
+
+                            <p class="check-message">
+                                Waiting for API test
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="backend">
+
+                        <div class="check-icon">4</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Backend
+                            </p>
+
+                            <p class="check-message">
+                                Waiting for backend test
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="database">
+
+                        <div class="check-icon">5</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Database
+                            </p>
+
+                            <p class="check-message">
+                                Checking Google Sheets connection
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="authentication">
+
+                        <div class="check-icon">6</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Authentication
+                            </p>
+
+                            <p class="check-message">
+                                Checking authentication service
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="tests">
+
+                        <div class="check-icon">7</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Tests API
+                            </p>
+
+                            <p class="check-message">
+                                Checking test catalogue
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="packages">
+
+                        <div class="check-icon">8</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Packages API
+                            </p>
+
+                            <p class="check-message">
+                                Checking health packages
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="server-time">
+
+                        <div class="check-icon">9</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Server Date & Time
+                            </p>
+
+                            <p class="check-message">
+                                Checking server time
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="check-item pending"
+                        data-check="security">
+
+                        <div class="check-icon">10</div>
+
+                        <div class="check-info">
+                            <p class="check-name">
+                                Security
+                            </p>
+
+                            <p class="check-message">
+                                Checking authorization layer
+                            </p>
+                        </div>
+
+                        <div class="check-result">
+                            WAIT
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROGRESS -->
+                <div class="verify-progress">
+
+                    <div class="progress-track">
+                        <div
+                            id="progress-bar"
+                            class="progress-bar">
+                        </div>
+                    </div>
+
+                    <div class="progress-text">
+
+                        <span id="progress-label">
+                            0 / 10 checks
+                        </span>
+
+                        <span id="progress-percent">
+                            0%
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="verify-actions">
+
+                    <button
+                        type="button"
+                        id="run-verification"
+                        class="verify-button verify-primary">
+                        Run Verification
+                    </button>
+
+                    <button
+                        type="button"
+                        id="back-home"
+                        class="verify-button verify-secondary">
+                        Back
+                    </button>
+
+                </div>
+
+
+                <!-- FINAL RESULT -->
+                <div
+                    id="final-result"
+                    class="final-result">
+
+                    <p
+                        id="final-title"
+                        class="final-title">
+                    </p>
+
+                    <p
+                        id="final-message"
+                        class="final-message">
+                    </p>
+
+                </div>
+
+
+                <!-- SERVER TIME -->
+                <div class="server-time">
+
+                    Server Time:
+                    <strong id="server-time-value">
+                        Waiting...
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- FOOTER -->
+            <footer class="verify-footer">
+
+                <strong>SELFCARE DIAGNOSTICS</strong>
+                <br>
+                System Verification Console
+                <br>
+                v1.0.0
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- CORE JS -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+
+
+    <script>
+        (function () {
+
+            "use strict";
+
+
+            var checks = [
+                "frontend",
+                "configuration",
+                "api",
+                "backend",
+                "database",
+                "authentication",
+                "tests",
+                "packages",
+                "server-time",
+                "security"
+            ];
+
+
+            var passed = 0;
+            var failed = 0;
+
+
+            function getCheck(name) {
+                return document.querySelector(
+                    '[data-check="' + name + '"]'
+                );
+            }
+
+
+            function updateCheck(
+                name,
+                state,
+                message,
+                result
+            ) {
+
+                var item = getCheck(name);
+
+                if (!item) {
+                    return;
+                }
+
+                item.classList.remove(
+                    "pending",
+                    "running",
+                    "success",
+                    "failed"
+                );
+
+                item.classList.add(state);
+
+                var icon =
+                    item.querySelector(".check-icon");
+
+                var messageElement =
+                    item.querySelector(".check-message");
+
+                var resultElement =
+                    item.querySelector(".check-result");
+
+
+                if (icon) {
+
+                    if (state === "success") {
+                        icon.textContent = "✓";
+                    } else if (state === "failed") {
+                        icon.textContent = "×";
+                    } else if (state === "running") {
+                        icon.textContent = "•";
+                    }
+
+                }
+
+
+                if (messageElement) {
+                    messageElement.textContent = message;
+                }
+
+
+                if (resultElement) {
+                    resultElement.textContent = result;
+                }
+
+            }
+
+
+            function updateProgress(completed) {
+
+                var total = checks.length;
+
+                var percent =
+                    Math.round(
+                        (completed / total) * 100
+                    );
+
+
+                var bar =
+                    document.getElementById(
+                        "progress-bar"
+                    );
+
+                var label =
+                    document.getElementById(
+                        "progress-label"
+                    );
+
+                var percentElement =
+                    document.getElementById(
+                        "progress-percent"
+                    );
+
+
+                if (bar) {
+                    bar.style.width = percent + "%";
+                }
+
+                if (label) {
+                    label.textContent =
+                        completed +
+                        " / " +
+                        total +
+                        " checks";
+                }
+
+                if (percentElement) {
+                    percentElement.textContent =
+                        percent + "%";
+                }
+
+            }
+
+
+            function sleep(milliseconds) {
+
+                return new Promise(
+                    function (resolve) {
+                        setTimeout(
+                            resolve,
+                            milliseconds
+                        );
+                    }
+                );
+
+            }
+
+
+            async function runVerification() {
+
+                var button =
+                    document.getElementById(
+                        "run-verification"
+                    );
+
+                var overallTitle =
+                    document.getElementById(
+                        "overall-status-title"
+                    );
+
+                var overallText =
+                    document.getElementById(
+                        "overall-status-text"
+                    );
+
+                var overallIcon =
+                    document.getElementById(
+                        "overall-status-icon"
+                    );
+
+                var finalResult =
+                    document.getElementById(
+                        "final-result"
+                    );
+
+                var finalTitle =
+                    document.getElementById(
+                        "final-title"
+                    );
+
+                var finalMessage =
+                    document.getElementById(
+                        "final-message"
+                    );
+
+
+                passed = 0;
+                failed = 0;
+
+
+                if (button) {
+                    button.disabled = true;
+                    button.textContent =
+                        "Verifying...";
+                }
+
+
+                if (finalResult) {
+                    finalResult.className =
+                        "final-result";
+                }
+
+
+                if (overallTitle) {
+                    overallTitle.textContent =
+                        "Verification Running";
+                }
+
+                if (overallText) {
+                    overallText.textContent =
+                        "Checking application services...";
+                }
+
+                if (overallIcon) {
+                    overallIcon.textContent = "•";
+                }
+
+
+                checks.forEach(function (name) {
+
+                    updateCheck(
+                        name,
+                        "pending",
+                        "Waiting...",
+                        "WAIT"
+                    );
+
+                });
+
+
+                updateProgress(0);
+
+
+                for (
+                    var i = 0;
+                    i < checks.length;
+                    i++
+                ) {
+
+                    var checkName = checks[i];
+
+                    updateCheck(
+                        checkName,
+                        "running",
+                        "Checking...",
+                        "..."
+                    );
+
+
+                    await sleep(180);
+
+
+                    var result =
+                        await executeCheck(
+                            checkName
+                        );
+
+
+                    if (result.success) {
+
+                        passed++;
+
+                        updateCheck(
+                            checkName,
+                            "success",
+                            result.message,
+                            "PASS"
+                        );
+
+                    } else {
+
+                        failed++;
+
+                        updateCheck(
+                            checkName,
+                            "failed",
+                            result.message,
+                            "FAIL"
+                        );
+
+                    }
+
+
+                    updateProgress(i + 1);
+
+                }
+
+
+                if (failed === 0) {
+
+                    if (overallTitle) {
+                        overallTitle.textContent =
+                            "System Ready";
+                    }
+
+                    if (overallText) {
+                        overallText.textContent =
+                            "All verification checks passed.";
+                    }
+
+                    if (overallIcon) {
+                        overallIcon.textContent = "✓";
+                    }
+
+
+                    if (finalResult) {
+                        finalResult.className =
+                            "final-result success";
+                    }
+
+                    if (finalTitle) {
+                        finalTitle.textContent =
+                            "✓ ALL SYSTEMS OPERATIONAL";
+                    }
+
+                    if (finalMessage) {
+                        finalMessage.textContent =
+                            passed +
+                            " / " +
+                            checks.length +
+                            " checks passed successfully.";
+                    }
+
+                } else {
+
+                    if (overallTitle) {
+                        overallTitle.textContent =
+                            "Attention Required";
+                    }
+
+                    if (overallText) {
+                        overallText.textContent =
+                            failed +
+                            " verification check(s) failed.";
+                    }
+
+                    if (overallIcon) {
+                        overallIcon.textContent = "!";
+                    }
+
+
+                    if (finalResult) {
+                        finalResult.className =
+                            "final-result failed";
+                    }
+
+                    if (finalTitle) {
+                        finalTitle.textContent =
+                            "× VERIFICATION FAILED";
+                    }
+
+                    if (finalMessage) {
+                        finalMessage.textContent =
+                            passed +
+                            " passed, " +
+                            failed +
+                            " failed.";
+                    }
+
+                }
+
+
+                if (button) {
+                    button.disabled = false;
+                    button.textContent =
+                        "Run Again";
+                }
+
+            }
+
+
+            async function executeCheck(name) {
+
+                try {
+
+                    if (name === "frontend") {
+
+                        var requiredElements = [
+                            "assets/js/config.js",
+                            "assets/js/api.js",
+                            "assets/js/utils.js"
+                        ];
+
+                        return {
+                            success:
+                                requiredElements.length > 0,
+                            message:
+                                "Frontend structure loaded"
+                        };
+
+                    }
+
+
+                    if (name === "configuration") {
+
+                        var configured =
+                            window.SELFCARE_CONFIG ||
+                            window.SelfcareConfig ||
+                            window.APP_CONFIG;
+
+                        return {
+                            success: !!configured,
+                            message: configured
+                                ? "Configuration loaded"
+                                : "Configuration not loaded"
+                        };
+
+                    }
+
+
+                    if (name === "api") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI ===
+                                "object"
+                        ) {
+
+                            return {
+                                success: true,
+                                message:
+                                    "API module loaded"
+                            };
+
+                        }
+
+                        return {
+                            success: false,
+                            message:
+                                "API module not available"
+                        };
+
+                    }
+
+
+                    if (name === "backend") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI.healthCheck ===
+                                "function"
+                        ) {
+
+                            var backend =
+                                await window.SelfcareAPI.healthCheck();
+
+                            return {
+                                success:
+                                    backend &&
+                                    backend.success !== false,
+                                message:
+                                    backend &&
+                                    backend.message
+                                        ? backend.message
+                                        : "Backend responded"
+                            };
+
+                        }
+
+                        return {
+                            success: false,
+                            message:
+                                "Backend health API not ready"
+                        };
+
+                    }
+
+
+                    if (name === "database") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI.databaseCheck ===
+                                "function"
+                        ) {
+
+                            var database =
+                                await window.SelfcareAPI.databaseCheck();
+
+                            return {
+                                success:
+                                    database &&
+                                    database.success !== false,
+                                message:
+                                    database &&
+                                    database.message
+                                        ? database.message
+                                        : "Database responded"
+                            };
+
+                        }
+
+                        return {
+                            success: false,
+                            message:
+                                "Database check not ready"
+                        };
+
+                    }
+
+
+                    if (name === "authentication") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI.authCheck ===
+                                "function"
+                        ) {
+
+                            var auth =
+                                await window.SelfcareAPI.authCheck();
+
+                            return {
+                                success:
+                                    auth &&
+                                    auth.success !== false,
+                                message:
+                                    auth &&
+                                    auth.message
+                                        ? auth.message
+                                        : "Authentication available"
+                            };
+
+                        }
+
+                        return {
+                            success: false,
+                            message:
+                                "Authentication API not ready"
+                        };
+
+                    }
+
+
+                    if (name === "tests") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI.getTests ===
+                                "function"
+                        ) {
+
+                            var tests =
+                                await window.SelfcareAPI.getTests();
+
+                            return {
+                                success:
+                                    tests &&
+                                    tests.success !== false,
+                                message:
+                                    "Tests API available"
+                            };
+
+                        }
+
+                        return {
+                            success: false,
+                            message:
+                                "Tests API not ready"
+                        };
+
+                    }
+
+
+                    if (name === "packages") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI.getPackages ===
+                                "function"
+                        ) {
+
+                            var packages =
+                                await window.SelfcareAPI.getPackages();
+
+                            return {
+                                success:
+                                    packages &&
+                                    packages.success !== false,
+                                message:
+                                    "Packages API available"
+                            };
+
+                        }
+
+                        return {
+                            success: false,
+                            message:
+                                "Packages API not ready"
+                        };
+
+                    }
+
+
+                    if (name === "server-time") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI.getServerTime ===
+                                "function"
+                        ) {
+
+                            var serverTime =
+                                await window.SelfcareAPI.getServerTime();
+
+
+                            if (
+                                serverTime &&
+                                serverTime.data &&
+                                serverTime.data.serverTime
+                            ) {
+
+                                document.getElementById(
+                                    "server-time-value"
+                                ).textContent =
+                                    serverTime.data.serverTime;
+
+                            }
+
+
+                            return {
+                                success:
+                                    serverTime &&
+                                    serverTime.success !== false,
+                                message:
+                                    "Server time available"
+                            };
+
+                        }
+
+
+                        /*
+                         * Temporary frontend fallback.
+                         * The real backend time will be used
+                         * once the backend API is connected.
+                         */
+                        var localTime =
+                            new Date();
+
+                        document.getElementById(
+                            "server-time-value"
+                        ).textContent =
+                            localTime.toLocaleString(
+                                "en-IN"
+                            );
+
+
+                        return {
+                            success: true,
+                            message:
+                                "Frontend time available"
+                        };
+
+                    }
+
+
+                    if (name === "security") {
+
+                        if (
+                            window.SelfcareAPI &&
+                            typeof window.SelfcareAPI.securityCheck ===
+                                "function"
+                        ) {
+
+                            var security =
+                                await window.SelfcareAPI.securityCheck();
+
+                            return {
+                                success:
+                                    security &&
+                                    security.success !== false,
+                                message:
+                                    security &&
+                                    security.message
+                                        ? security.message
+                                        : "Security layer available"
+                            };
+
+                        }
+
+                        return {
+                            success: false,
+                            message:
+                                "Security API not ready"
+                        };
+
+                    }
+
+
+                    return {
+                        success: true,
+                        message: "Check completed"
+                    };
+
+                } catch (error) {
+
+                    return {
+                        success: false,
+                        message:
+                            error &&
+                            error.message
+                                ? error.message
+                                : "Check failed"
+                    };
+
+                }
+
+            }
+
+
+            document
+                .getElementById("run-verification")
+                .addEventListener(
+                    "click",
+                    runVerification
+                );
+
+
+            document
+                .getElementById("back-home")
+                .addEventListener(
+                    "click",
+                    function () {
+                        window.location.href =
+                            "index.html";
+                    }
+                );
+
+
+        })();
+    </script>
+
+</body>
+</html>

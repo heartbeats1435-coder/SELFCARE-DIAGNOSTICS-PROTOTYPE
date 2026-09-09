@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="description" content="Selfcare Diagnostics Context-Aware AI Health Assistant - Real-time diagnostic test catalog, report explanation, prescription scanner, and doorstep booking for Chennai & Tiruvannamalai.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare AI">
+
+  <title>Selfcare AI Health & Lab Assistant | Selfcare Diagnostics</title>
+
+  <!-- Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/customer.css">
+  <link rel="stylesheet" href="assets/css/ai-assistant.css">
+</head>
+<body class="ai-assistant-body">
+
+  <!-- 3D Glassmorphic Ambient Floating Light Orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Header Navigation Bar -->
+  <header class="app-header header-sticky ai-header glass-header">
+    <div class="header-main-row">
+      <!-- Left: Drawer Toggle & Brand Logo -->
+      <div class="header-left">
+        <button type="button" class="icon-nav-btn glass-btn" id="btn-toggle-drawer" aria-label="Open Menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="16" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <a href="customer.html" class="header-logo-link">
+          <img src="assets/images/logo.png" alt="Selfcare Diagnostics" class="header-logo-img">
+        </a>
+      </div>
+
+      <!-- Right: Language Selector, Location Pill, Notifications, User Avatar -->
+      <div class="header-right">
+        <!-- 5-Language Switcher Pill -->
+        <div class="language-dropdown-wrapper">
+          <select id="ai-language-select" class="language-select-pill" aria-label="Select AI Language">
+            <option value="en" selected>English</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="ml">മലയാളം (Malayalam)</option>
+          </select>
+        </div>
+
+        <!-- Location Pill -->
+        <button type="button" class="location-pill-btn glass-pill" id="btn-select-location" aria-label="Select City">
+          <div class="loc-pin-col">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="loc-text-col">
+            <span class="loc-city-title">
+              <span id="current-location-text">Chennai</span>
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+            <span class="loc-badge-sub"><span class="pulse-dot"></span> Home Collection</span>
+          </div>
+        </button>
+
+        <!-- Notifications Bell -->
+        <button type="button" class="icon-nav-btn notif-btn glass-btn" id="btn-notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="notif-badge hidden" id="notification-badge-count">0</span>
+        </button>
+
+        <!-- User Avatar -->
+        <a href="profile.html" class="user-avatar-pill 3d-avatar" id="header-avatar-link" aria-label="Go to Profile">
+          <span id="header-avatar-initials">SC</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- AI Live System Status Ribbon -->
+    <div class="ai-status-subbar glass-subbar">
+      <div class="ai-subbar-left">
+        <span class="ai-badge-live"><span class="online-indicator-dot"></span> CONNECTED TO YOUR ACCOUNT</span>
+        <span class="ai-subbar-text" id="ai-subbar-status-text">Tests, Packages, Cart &amp; Reports Synced</span>
+      </div>
+      <div class="ai-subbar-right">
+        <button type="button" class="btn-clear-chat-top glass-pill-sm" id="btn-clear-chat" title="Clear Chat History">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span id="label-btn-clear">Reset</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Side Navigation Drawer -->
+  <div class="drawer-backdrop hidden" id="drawer-overlay"></div>
+  <aside class="side-drawer" id="nav-drawer" aria-hidden="true">
+    <div class="drawer-top-profile">
+      <div class="drawer-avatar" id="drawer-avatar-initials">SC</div>
+      <div class="drawer-user-meta">
+        <h3 class="drawer-name" id="drawer-user-name">Selfcare Patient</h3>
+        <p class="drawer-phone" id="drawer-user-phone">+91 7010174890</p>
+      </div>
+      <button type="button" class="btn-drawer-close" id="btn-close-drawer" aria-label="Close Drawer">&times;</button>
+    </div>
+
+    <nav class="drawer-nav-list">
+      <a href="customer.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home Dashboard</span>
+      </a>
+      <a href="tests.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/><path d="M7 14h10"/></svg>
+        <span>Book Lab Tests</span>
+      </a>
+      <a href="packages.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M12 10.5v6"/><path d="M9 13.5h6"/></svg>
+        <span>Health Packages</span>
+      </a>
+      <a href="reports.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/></svg>
+        <span>My Test Reports</span>
+      </a>
+      <a href="checkout.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span>My Cart</span>
+      </a>
+      <a href="ai-assistant.html" class="drawer-nav-item active">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <span>AI Health Assistant</span>
+      </a>
+      <a href="profile.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile &amp; Family</span>
+      </a>
+
+      <div class="drawer-separator"></div>
+
+      <button type="button" class="drawer-nav-item drawer-logout-btn" id="btn-drawer-logout">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sign Out</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Scrollable Chat Interface -->
+  <main class="main-content ai-chat-main">
+
+    <!-- Active Page Context Awareness Banner -->
+    <div class="ai-context-banner glass-card hidden" id="ai-context-banner">
+      <div class="context-banner-content">
+        <span class="context-icon" id="context-banner-icon">🎯</span>
+        <div class="context-text-col">
+          <strong id="context-banner-title">Current Context</strong>
+          <span id="context-banner-subtitle">Browsing application</span>
+        </div>
+      </div>
+      <button type="button" class="btn-clear-context" id="btn-clear-context" title="Clear page context" aria-label="Clear context">&times;</button>
+    </div>
+
+    <!-- Horizontally Scrollable AI Quick Action Chips -->
+    <section class="quick-prompts-wrapper" aria-label="AI Quick Actions">
+      <div class="quick-prompts-scroll" id="ai-quick-actions-bar">
+        <!-- Injected dynamically by language in ai-assistant.js -->
+      </div>
+    </section>
+
+    <!-- Chat Messages Stream Container -->
+    <div class="chat-messages-container" id="chat-messages-list">
+      <!-- Welcome message and dynamic bubbles injected by ai-assistant.js -->
+    </div>
+
+    <!-- 3D Animated Typing Indicator -->
+    <div class="ai-typing-indicator glass-indicator hidden" id="ai-typing-box">
+      <div class="bot-avatar-xs">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      </div>
+      <div class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <span class="typing-text" id="ai-typing-status-text">Thinking...</span>
+    </div>
+
+  </main>
+
+  <!-- 3D Floating Glass Input Dock -->
+  <footer class="ai-input-dock glass-dock">
+    <form id="form-ai-chat" class="chat-input-form" onsubmit="return false;">
+
+      <!-- Attached Prescription / Report Preview Pill -->
+      <div class="attached-file-strip hidden" id="attached-file-preview">
+        <span class="file-icon">📄</span>
+        <span class="file-name" id="attached-file-name">prescription.pdf</span>
+        <button type="button" class="btn-remove-file" id="btn-remove-attachment" aria-label="Remove attached file">&times;</button>
+      </div>
+
+      <div class="input-row-controls">
+        <!-- Prescription / Report Upload Trigger -->
+        <button type="button" class="dock-btn-icon glass-dock-btn" id="btn-trigger-upload" title="Upload Prescription / Report" aria-label="Upload Prescription">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+
+        <!-- Message Input Field -->
+        <div class="input-field-wrapper">
+          <textarea id="ai-prompt-input" class="chat-textarea glass-textarea" rows="1" placeholder="Ask a test, symptoms, report explanation..." required></textarea>
+        </div>
+
+        <!-- Voice Dictation Button (Multi-language Speech Recognition) -->
+        <button type="button" class="dock-btn-icon glass-dock-btn" id="btn-voice-input" title="Voice Input (Speech to Text)" aria-label="Voice Input">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+
+        <!-- Send 3D Glow Button -->
+        <button type="button" class="btn-chat-send 3d-send-btn" id="btn-send-message" aria-label="Send Message">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: UPLOAD PRESCRIPTION -> GET TESTS (100% PRESERVED & WORKING) -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop hidden" id="upload-report-modal" role="dialog" aria-modal="true">
+    <div class="mobile-bottom-sheet glass-modal">
+      <div class="sheet-drag-handle"></div>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Upload Prescription → Get Tests</h2>
+          <p class="modal-subtitle">Upload doctor's prescription to extract &amp; match Selfcare lab tests</p>
+        </div>
+        <button type="button" class="modal-close" id="btn-close-upload-modal">&times;</button>
+      </div>
+
+      <div class="modal-body-form">
+        <div class="dropzone-box" id="report-dropzone">
+          <div class="dropzone-icon">📥</div>
+          <strong class="dropzone-title">Tap or Drag Prescription Document / Photo</strong>
+          <p class="dropzone-sub">Supports PDF, JPG, PNG (Camera photos supported, Max 10MB)</p>
+          <input type="file" id="report-file-input" class="hidden-file-input" accept=".pdf,.png,.jpg,.jpeg,image/*">
+          <button type="button" class="btn btn-outline-primary btn-sm mt-3" id="btn-browse-files">
+            📁 Select Prescription File
+          </button>
+        </div>
+
+        <div class="ocr-privacy-note mt-2">
+          <span class="lock-icon">🔒</span>
+          <span>Prescriptions are processed securely and matched against Selfcare NABL reference lists.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Location City Selection Modal -->
+  <div class="modal-backdrop hidden" id="location-modal" role="dialog" aria-modal="true">
+    <div class="modal-card glass-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Your City</h3>
+        <button type="button" class="modal-close" id="btn-close-location-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="location-search-box">
+          <input type="text" id="city-search-input" class="form-control" placeholder="Search city name...">
+        </div>
+        <div class="popular-cities-grid">
+          <button type="button" class="city-btn active" data-city="Chennai"><span class="city-name">Chennai</span></button>
+          <button type="button" class="city-btn" data-city="Tiruvannamalai"><span class="city-name">Tiruvannamalai</span></button>
+          <button type="button" class="city-btn" data-city="Coimbatore"><span class="city-name">Coimbatore</span></button>
+          <button type="button" class="city-btn" data-city="Madurai"><span class="city-name">Madurai</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Modal -->
+  <div class="modal-backdrop hidden" id="notifications-modal" role="dialog" aria-modal="true">
+    <div class="modal-card glass-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Notifications</h3>
+        <button type="button" class="modal-close" id="btn-close-notif-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="notif-item">
+          <span class="notif-dot green"></span>
+          <div class="notif-text">
+            <strong>10% Online Payment Discount Active</strong>
+            <p>Pay online via UPI or Card to receive 10% instant discount on checkups.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Message Banner -->
+  <div class="toast-banner hidden" id="ai-toast" role="status" aria-live="polite">
+    <span id="toast-message">Item added to cart</span>
+  </div>
+
+  <!-- 3D Medical Glowing Floating Bottom Nav (Synced with customer.html, tests.html, reports.html) -->
+  <nav class="bottom-nav glass-nav">
+    <a href="customer.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <span class="nav-label">Home</span>
+    </a>
+
+    <a href="tests.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6"/>
+          <path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/>
+          <path d="M7 14h10"/>
+        </svg>
+      </div>
+      <span class="nav-label">Tests</span>
+    </a>
+
+    <a href="packages.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          <rect x="3" y="7" width="18" height="13" rx="3"/>
+          <path d="M12 10.5v6"/>
+          <path d="M9 13.5h6"/>
+        </svg>
+      </div>
+      <span class="nav-label">Packages</span>
+    </a>
+
+    <a href="reports.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/>
+        </svg>
+      </div>
+      <span class="nav-label">Reports</span>
+    </a>
+
+    <a href="checkout.html" class="nav-link">
+      <div class="nav-icon-wrapper position-relative" id="bottom-cart-nav-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="nav-cart-count hidden" id="bottom-cart-badge">0</span>
+      </div>
+      <span class="nav-label">Cart</span>
+    </a>
+
+    <a href="profile.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <span class="nav-label">Profile</span>
+    </a>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/ai-assistant.js"></script>
+</body>
+</html>

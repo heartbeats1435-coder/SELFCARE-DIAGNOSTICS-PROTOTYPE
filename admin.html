@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare Admin">
+  <meta name="description" content="Selfcare Diagnostics Mobile Lab & Operations App">
+
+  <title>Selfcare Admin | Mobile Operations Console</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23009963'/><path d='M30 50h12l5-15 10 30 7-20 6 5h10' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div id="admin-auth-guard" class="admin-auth-guard hidden">
+    <div class="auth-guard-card">
+      <div class="guard-icon-bubble">🔒</div>
+      <h2>Operations Pin Required</h2>
+      <p>Please authenticate your administrative session to access patient records & fleet controls.</p>
+      <div class="guard-actions">
+        <a href="login.html?redirect=admin.html" class="btn btn-primary btn-3d w-100">Sign In as Admin</a>
+        <button type="button" class="btn btn-outline-secondary w-100" id="btn-bypass-guard">Continue as Local Admin</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="mobile-app-bar">
+    <div class="app-bar-top">
+      <div class="app-brand-cluster">
+        <div class="brand-logo-gem">SD</div>
+        <div class="brand-info">
+          <span class="brand-name">SELFCARE</span>
+          <span class="brand-tag">OPS CONSOLE</span>
+        </div>
+      </div>
+
+      <div class="app-top-actions">
+        <div class="system-status-indicator" id="system-status-pill" title="System Status">
+          <span class="status-pulse-dot"></span>
+          <span class="status-text" id="status-text">Live</span>
+        </div>
+
+        <button type="button" class="icon-touch-btn" id="btn-admin-notifications" aria-label="Alerts">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notification-badge-count hidden" id="admin-notif-badge">0</span>
+        </button>
+
+        <div class="admin-mini-avatar" id="admin-avatar-initials" title="User Profile">AD</div>
+        <button type="button" class="btn-logout-mini" id="btn-admin-logout" title="Sign Out">🚪</button>
+      </div>
+    </div>
+
+    <div class="app-bar-secondary">
+      <div class="branch-pill-wrapper">
+        <span class="branch-pin-icon">📍</span>
+        <select id="admin-branch-select" class="branch-native-select">
+          <option value="all">All Hubs (Aggregated)</option>
+          <option value="Chennai" selected>Chennai Hub (Vettuvankenni)</option>
+          <option value="Tiruvannamalai">Tiruvannamalai Branch</option>
+        </select>
+      </div>
+      <div class="live-clock-badge" id="admin-live-clock">--:--:--</div>
+    </div>
+
+    <nav class="mobile-pills-scroll">
+      <button type="button" class="admin-nav-tab active" data-tab="overview">
+        <span>📊 Overview</span>
+      </button>
+      <button type="button" class="admin-nav-tab" data-tab="bookings">
+        <span>📋 Bookings</span>
+        <span class="nav-count-pill" id="nav-count-bookings">0</span>
+      </button>
+      <button type="button" class="admin-nav-tab" data-tab="dispatch">
+        <span>🚴 Dispatch (10km)</span>
+        <span class="nav-count-pill pulse" id="nav-count-dispatch">0</span>
+      </button>
+      <button type="button" class="admin-nav-tab" data-tab="lab">
+        <span>🔬 Lab Queue</span>
+        <span class="nav-count-pill warning" id="nav-count-lab">0</span>
+      </button>
+      <button type="button" class="admin-nav-tab" data-tab="catalog">
+        <span>🧪 Catalog</span>
+      </button>
+      <button type="button" class="admin-nav-tab" data-tab="revenue">
+        <span>💰 Revenue</span>
+      </button>
+      <button type="button" class="admin-nav-tab" data-tab="prescriptions">
+        <span>📑 Rx (AI OCR)</span>
+      </button>
+      <button type="button" class="admin-nav-tab" data-tab="audit">
+        <span>🛡️ Audit</span>
+      </button>
+    </nav>
+  </header>
+
+  <div id="admin-notif-popover" class="admin-notif-popover hidden">
+    <div class="popover-header">
+      <span class="popover-title">Operations Alerts</span>
+      <button type="button" class="btn-text-sm" id="btn-mark-all-read">Mark all read</button>
+    </div>
+    <div class="popover-body" id="admin-notif-list">
+      <div class="empty-notif-msg">No alerts recorded.</div>
+    </div>
+  </div>
+
+  <main class="mobile-main-viewport">
+
+    <section class="admin-tab-pane active" id="pane-overview">
+      <div class="mobile-view-header">
+        <div class="header-text-group">
+          <h1 class="mobile-view-title">Daily Operations</h1>
+          <p class="mobile-view-sub">Real-time local ledger financials & collections</p>
+        </div>
+
+        <div class="date-chips-scroller">
+          <button type="button" class="btn-period active" data-range="today">Today</button>
+          <button type="button" class="btn-period" data-range="yesterday">Yesterday</button>
+          <button type="button" class="btn-period" data-range="this_week">Week</button>
+          <button type="button" class="btn-period" data-range="this_month">Month</button>
+          <button type="button" class="btn-period" data-range="this_year">Year</button>
+        </div>
+      </div>
+
+      <div class="kpi-mobile-grid">
+        <div class="kpi-card-glass border-emerald">
+          <div class="kpi-header">
+            <span class="kpi-label">Gross Revenue</span>
+            <span class="kpi-icon green">₹</span>
+          </div>
+          <div class="kpi-value" id="kpi-metric-revenue">₹0</div>
+          <div class="kpi-foot" id="kpi-sub-revenue">0 confirmed orders</div>
+        </div>
+
+        <div class="kpi-card-glass border-teal">
+          <div class="kpi-header">
+            <span class="kpi-label">Realized Profit</span>
+            <span class="kpi-icon teal">📈</span>
+          </div>
+          <div class="kpi-value text-emerald" id="kpi-metric-profit">₹0</div>
+          <div class="kpi-foot font-bold text-success" id="kpi-metric-margin">Margin: 0.0%</div>
+        </div>
+
+        <div class="kpi-card-glass border-rose">
+          <div class="kpi-header">
+            <span class="kpi-label">B2B Lab Cost</span>
+            <span class="kpi-icon rose">📉</span>
+          </div>
+          <div class="kpi-value text-rose" id="kpi-metric-b2b">₹0</div>
+          <div class="kpi-foot">Direct supplier outlay</div>
+        </div>
+
+        <div class="kpi-card-glass border-blue">
+          <div class="kpi-header">
+            <span class="kpi-label">Active Orders</span>
+            <span class="kpi-icon blue">🩸</span>
+          </div>
+          <div class="kpi-value" id="kpi-metric-collections">0</div>
+          <div class="kpi-foot" id="kpi-sub-collections">0 Home / 0 Lab</div>
+        </div>
+
+        <div class="kpi-card-glass border-amber full-span">
+          <div class="kpi-header">
+            <span class="kpi-label">Pending Lab Reports</span>
+            <span class="kpi-icon amber">🔬</span>
+          </div>
+          <div class="kpi-value text-amber" id="kpi-metric-reports-pending">0</div>
+          <div class="kpi-foot" id="kpi-sub-reports">0 published reports</div>
+        </div>
+      </div>
+
+      <div class="quick-action-strip">
+        <button type="button" class="btn-quick-touch" id="btn-action-refresh">
+          <span class="btn-touch-icon">🔄</span>
+          <span>Refresh</span>
+        </button>
+        <button type="button" class="btn-quick-touch" id="btn-action-new-test">
+          <span class="btn-touch-icon">🧪</span>
+          <span>+ Test</span>
+        </button>
+        <button type="button" class="btn-quick-touch" id="btn-action-new-pkg">
+          <span class="btn-touch-icon">📦</span>
+          <span>+ Package</span>
+        </button>
+        <button type="button" class="btn-quick-touch" id="btn-action-new-tech">
+          <span class="btn-touch-icon">🚴</span>
+          <span>+ Tech</span>
+        </button>
+      </div>
+
+      <div class="mobile-surface-card">
+        <div class="card-head-between">
+          <div>
+            <h2 class="card-title">Urgent Home Collections</h2>
+            <p class="card-sub">Awaiting phlebotomist assignment</p>
+          </div>
+          <button type="button" class="btn-link-touch" id="btn-goto-dispatch">Dispatch →</button>
+        </div>
+
+        <div class="mobile-table-wrap">
+          <table class="mobile-table">
+            <thead>
+              <tr>
+                <th>Booking</th>
+                <th>Patient</th>
+                <th>Location</th>
+                <th>Slot</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="table-overview-urgent">
+              <tr>
+                <td colspan="7" class="loading-state">Querying active records...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-tab-pane hidden" id="pane-bookings">
+      <div class="mobile-surface-card">
+        <div class="card-head-between">
+          <div>
+            <h1 class="card-title">Bookings Ledger</h1>
+            <p class="card-sub">Real-time synchronized orders</p>
+          </div>
+        </div>
+
+        <div class="mobile-search-stack">
+          <input type="text" id="input-search-bookings" class="mobile-form-input" placeholder="Search Patient, Phone or ID...">
+          <div class="mobile-select-row">
+            <select id="select-filter-collection-type" class="mobile-form-select">
+              <option value="ALL">All Types</option>
+              <option value="HOME">Home Pickup</option>
+              <option value="LAB">Lab Visit</option>
+            </select>
+            <select id="select-filter-booking-status" class="mobile-form-select">
+              <option value="ALL">All Statuses</option>
+              <option value="CONFIRMED">Confirmed</option>
+              <option value="AWAITING_TECHNICIAN">Awaiting Tech</option>
+              <option value="ASSIGNED">Assigned</option>
+              <option value="SAMPLE_COLLECTED">Collected</option>
+              <option value="RECEIVED_AT_LAB">In Lab</option>
+              <option value="REPORT_PUBLISHED">Published</option>
+              <option value="CANCELLED">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mobile-table-wrap">
+          <table class="mobile-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Patient</th>
+                <th>Contact</th>
+                <th>Type</th>
+                <th>Slot</th>
+                <th>Tests</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Tech</th>
+                <th>Status</th>
+                <th>Manage</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-bookings">
+              <tr>
+                <td colspan="11" class="loading-state">Loading booking records...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-tab-pane hidden" id="pane-dispatch">
+      <div class="mobile-surface-card">
+        <div class="card-head-between">
+          <div>
+            <h1 class="card-title">Haversine Fleet Dispatch</h1>
+            <p class="card-sub">Automatic 10 KM proximity scan</p>
+          </div>
+          <span class="badge-counter" id="dispatch-pending-count">0</span>
+        </div>
+
+        <h3 class="mobile-section-label">1. Pending Home Requests</h3>
+        <div class="dispatch-booking-scroller" id="dispatch-bookings-queue">
+          <div class="empty-state-p">No pending home collections.</div>
+        </div>
+
+        <div class="dispatch-detail-container mt-3">
+          <div class="dispatch-target-header">
+            <h3 class="card-title text-sm" id="dispatch-selected-ref">Select a booking above</h3>
+            <p class="card-sub" id="dispatch-selected-meta">Technicians within 10 km will appear here</p>
+          </div>
+
+          <div class="dispatch-actions mb-2" id="dispatch-main-actions" style="display:none;">
+            <button type="button" class="btn btn-primary btn-3d w-100" id="btn-broadcast-10km">⚡ Broadcast to Eligible Techs (≤10 km)</button>
+          </div>
+
+          <div id="dispatch-content-area">
+            <div class="empty-hero-message">
+              <span class="hero-icon">📍</span>
+              <p>Tap an urgent booking in the queue above to calculate nearby phlebotomists.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="fleet-section mt-4">
+          <div class="card-head-between mb-2">
+            <h3 class="mobile-section-label m-0">Registered Phlebotomists</h3>
+            <button type="button" class="btn-link-touch" id="btn-refresh-techs">Refresh Fleet</button>
+          </div>
+          <div class="tech-fleet-grid" id="tech-fleet-container">
+            <div class="loading-state">Loading phlebotomist fleet...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-tab-pane hidden" id="pane-lab">
+      <div class="mobile-surface-card">
+        <div class="card-head-between">
+          <div>
+            <h1 class="card-title">Pathology Lab Verification</h1>
+            <p class="card-sub">Publish verified PDF reports to customer app</p>
+          </div>
+        </div>
+
+        <div class="mobile-search-stack">
+          <select id="select-lab-filter-status" class="mobile-form-select">
+            <option value="AWAITING_REPORT">Awaiting Report Upload</option>
+            <option value="PUBLISHED">Published Reports</option>
+            <option value="ALL">All Records</option>
+          </select>
+        </div>
+
+        <div class="mobile-table-wrap">
+          <table class="mobile-table">
+            <thead>
+              <tr>
+                <th>Booking</th>
+                <th>Patient</th>
+                <th>Tests</th>
+                <th>Date</th>
+                <th>Report PDF</th>
+                <th>Ver</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-lab-queue">
+              <tr>
+                <td colspan="8" class="loading-state">Loading pathology queue...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-tab-pane hidden" id="pane-catalog">
+      <div class="mobile-surface-card">
+        <div class="catalog-segmented-control">
+          <button type="button" class="catalog-tab-btn active" data-target="catalog-tests">Diagnostic Tests</button>
+          <button type="button" class="catalog-tab-btn" data-target="catalog-packages">Checkup Packages</button>
+        </div>
+
+        <div class="catalog-section-pane active" id="catalog-tests">
+          <div class="card-head-between mt-3 mb-2">
+            <input type="text" id="search-tests-catalog" class="mobile-form-input flex-1 mr-2" placeholder="Search test name/code...">
+            <button type="button" class="btn btn-primary btn-3d" id="btn-open-add-test">+ Test</button>
+          </div>
+
+          <div class="mobile-table-wrap">
+            <table class="mobile-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Test Name</th>
+                  <th>Dept</th>
+                  <th>Sample</th>
+                  <th>TAT</th>
+                  <th>MRP</th>
+                  <th>Price</th>
+                  <th>B2B</th>
+                  <th>Profit</th>
+                  <th>Margin</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="table-body-tests-catalog">
+                <tr>
+                  <td colspan="12" class="loading-state">Loading tests directory...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="catalog-section-pane hidden" id="catalog-packages">
+          <div class="card-head-between mt-3 mb-2">
+            <input type="text" id="search-pkgs-catalog" class="mobile-form-input flex-1 mr-2" placeholder="Search package title...">
+            <button type="button" class="btn btn-primary btn-3d" id="btn-open-add-package">+ Package</button>
+          </div>
+
+          <div class="mobile-table-wrap">
+            <table class="mobile-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Title</th>
+                  <th>Tests</th>
+                  <th>List</th>
+                  <th>MRP</th>
+                  <th>Price</th>
+                  <th>B2B</th>
+                  <th>Profit</th>
+                  <th>Margin</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="table-body-packages-catalog">
+                <tr>
+                  <td colspan="11" class="loading-state">Loading packages directory...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-tab-pane hidden" id="pane-revenue">
+      <div class="mobile-surface-card">
+        <div class="card-head-between">
+          <div>
+            <h1 class="card-title">Financial & Margin Deck</h1>
+            <p class="card-sub">Computed strictly from completed line-item orders</p>
+          </div>
+        </div>
+
+        <div class="date-chips-scroller mt-2 mb-3">
+          <button type="button" class="btn-rev-period active" data-period="DAY">Daily</button>
+          <button type="button" class="btn-rev-period" data-period="WEEK">Weekly</button>
+          <button type="button" class="btn-rev-period" data-period="MONTH">Monthly</button>
+          <button type="button" class="btn-rev-period" data-period="YEAR">Yearly</button>
+        </div>
+
+        <div class="mobile-summary-stack">
+          <div class="mini-kpi-row">
+            <span>Gross Revenue</span>
+            <strong id="rev-metric-gross">₹0</strong>
+          </div>
+          <div class="mini-kpi-row">
+            <span>Supplier B2B Outlay</span>
+            <strong class="text-rose" id="rev-metric-cost">₹0</strong>
+          </div>
+          <div class="mini-kpi-row">
+            <span>Gross Realized Profit</span>
+            <strong class="text-emerald" id="rev-metric-profit">₹0</strong>
+          </div>
+          <div class="mini-kpi-row">
+            <span>Overall Margin</span>
+            <strong class="text-teal" id="rev-metric-margin">0.0%</strong>
+          </div>
+          <div class="mini-kpi-row">
+            <span>Average Order Value (AOV)</span>
+            <strong id="rev-metric-aov">₹0</strong>
+          </div>
+        </div>
+
+        <h3 class="mobile-section-label mt-3">Unit Profitability Matrix</h3>
+        <div class="mobile-table-wrap">
+          <table class="mobile-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Sell</th>
+                <th>B2B</th>
+                <th>Total Gross</th>
+                <th>Total B2B</th>
+                <th>Profit</th>
+                <th>Margin</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-profit-matrix">
+              <tr>
+                <td colspan="8" class="loading-state">Aggregating financials...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-tab-pane hidden" id="pane-prescriptions">
+      <div class="mobile-surface-card">
+        <div class="card-head-between">
+          <div>
+            <h1 class="card-title">Prescription Intake Queue</h1>
+            <p class="card-sub">Review patient uploaded Rx images & approvals</p>
+          </div>
+        </div>
+
+        <div class="mobile-search-stack">
+          <input type="text" id="input-search-prescriptions" class="mobile-form-input" placeholder="Search patient name, phone, doctor or ID...">
+          <div class="mobile-select-row">
+            <select id="select-filter-rx-status" class="mobile-form-select">
+              <option value="ALL">All Prescriptions</option>
+              <option value="PENDING" selected>Pending Review</option>
+              <option value="VERIFIED">Verified & Approved</option>
+              <option value="REJECTED">Declined / Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="prescriptions-grid mt-3" id="prescriptions-container">
+          <div class="loading-state">Loading prescription records...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-tab-pane hidden" id="pane-audit">
+      <div class="mobile-surface-card">
+        <div class="card-head-between">
+          <div>
+            <h1 class="card-title">Security & Audit Logs</h1>
+            <p class="card-sub">Immutable operational mutation ledger</p>
+          </div>
+        </div>
+
+        <div class="mobile-table-wrap mt-3">
+          <table class="mobile-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>Entity</th>
+                <th>ID</th>
+                <th>Old Value</th>
+                <th>New Value</th>
+              </tr>
+            </thead>
+            <tbody id="table-body-audit-logs">
+              <tr>
+                <td colspan="7" class="loading-state">Reading audit logs...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="mobile-bottom-dock">
+    <button type="button" class="dock-item active admin-nav-tab" data-tab="overview">
+      <span class="dock-icon">📊</span>
+      <span class="dock-label">Overview</span>
+    </button>
+    <button type="button" class="dock-item admin-nav-tab" data-tab="bookings">
+      <span class="dock-icon">📋</span>
+      <span class="dock-label">Bookings</span>
+    </button>
+    <button type="button" class="dock-item admin-nav-tab" data-tab="dispatch">
+      <span class="dock-icon">🚴</span>
+      <span class="dock-label">Dispatch</span>
+    </button>
+    <button type="button" class="dock-item admin-nav-tab" data-tab="lab">
+      <span class="dock-icon">🔬</span>
+      <span class="dock-label">Lab Queue</span>
+    </button>
+    <button type="button" class="dock-item" id="btn-open-more-menu">
+      <span class="dock-icon">⚡</span>
+      <span class="dock-label">More</span>
+    </button>
+  </nav>
+
+  <div class="admin-modal-backdrop hidden" id="sheet-more-menu">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="sheet-header">
+        <h3 class="sheet-title">Operations Console</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-more-sheet">&times;</button>
+      </div>
+      <div class="sheet-body-grid">
+        <button type="button" class="sheet-nav-tile admin-nav-tab" data-tab="catalog">
+          <span class="tile-icon">🧪</span>
+          <span class="tile-title">Test Catalog</span>
+          <span class="tile-desc">Manage tests & packages</span>
+        </button>
+        <button type="button" class="sheet-nav-tile admin-nav-tab" data-tab="revenue">
+          <span class="tile-icon">💰</span>
+          <span class="tile-title">Revenue & Profit</span>
+          <span class="tile-desc">B2B margin matrix</span>
+        </button>
+        <button type="button" class="sheet-nav-tile admin-nav-tab" data-tab="prescriptions">
+          <span class="tile-icon">📑</span>
+          <span class="tile-title">Prescriptions</span>
+          <span class="tile-desc">AI OCR prescription intake</span>
+        </button>
+        <button type="button" class="sheet-nav-tile admin-nav-tab" data-tab="audit">
+          <span class="tile-icon">🛡️</span>
+          <span class="tile-title">Audit Trail</span>
+          <span class="tile-desc">Security & mutation logs</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-modal-backdrop hidden" id="modal-test-editor">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-test-title">Diagnostic Test Configuration</h2>
+        <button type="button" class="btn-close-modal" id="btn-close-test-modal">&times;</button>
+      </div>
+      <form id="form-test-editor" class="modal-body-form">
+        <input type="hidden" id="edit-test-id">
+
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="test-code">Test Code *</label>
+            <input type="text" id="test-code" class="form-input" placeholder="e.g. SCD-CBC" required>
+          </div>
+          <div class="form-field">
+            <label for="test-category">Department *</label>
+            <select id="test-category" class="form-input" required>
+              <option value="Hematology">Hematology</option>
+              <option value="Biochemistry">Biochemistry</option>
+              <option value="Diabetology">Diabetology</option>
+              <option value="Lipid / Heart">Lipid / Heart</option>
+              <option value="Thyroid">Thyroid</option>
+              <option value="Liver Profile">Liver Profile</option>
+              <option value="Kidney / Renal">Kidney / Renal</option>
+              <option value="Clinical Biochemistry">Clinical Biochemistry</option>
+              <option value="Fever / Infection">Fever / Infection</option>
+              <option value="Hormones / Endocrinology">Hormones / Endocrinology</option>
+              <option value="Immunology">Immunology</option>
+              <option value="Serology / Infectious Diseases">Serology / Infectious Diseases</option>
+              <option value="Microbiology">Microbiology</option>
+              <option value="Molecular Diagnostics">Molecular Diagnostics</option>
+              <option value="Clinical Pathology">Clinical Pathology</option>
+              <option value="Special / Advanced Tests">Special / Advanced Tests</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="test-name">Complete Test Name *</label>
+          <input type="text" id="test-name" class="form-input" placeholder="e.g. Complete Blood Count (CBC)" required>
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-field">
+            <label for="test-mrp">MRP (₹) *</label>
+            <input type="number" step="1" min="0" id="test-mrp" class="form-input" placeholder="500" required>
+          </div>
+          <div class="form-field">
+            <label for="test-offer-price">Price (₹) *</label>
+            <input type="number" step="1" min="0" id="test-offer-price" class="form-input" placeholder="300" required>
+          </div>
+          <div class="form-field">
+            <label for="test-b2b-cost">B2B Cost (₹) *</label>
+            <input type="number" step="1" min="0" id="test-b2b-cost" class="form-input" placeholder="60" required>
+          </div>
+        </div>
+
+        <div class="live-margin-preview" id="test-margin-preview">
+          Calculated Profit: <strong>₹240</strong> | Margin: <strong>80.0%</strong>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="test-sample-type">Sample Type *</label>
+            <input type="text" id="test-sample-type" class="form-input" placeholder="e.g. EDTA Blood, Serum" required>
+          </div>
+          <div class="form-field">
+            <label for="test-tat">Turnaround (TAT) *</label>
+            <input type="text" id="test-tat" class="form-input" placeholder="e.g. 6 Hours" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="test-preparation">Patient Preparation Notes</label>
+          <input type="text" id="test-preparation" class="form-input" placeholder="e.g. 10-12 hrs fasting required">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-test-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-3d">Save Test to Ledger</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-modal-backdrop hidden" id="modal-package-editor">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-pkg-title">Health Checkup Package Configuration</h2>
+        <button type="button" class="btn-close-modal" id="btn-close-pkg-modal">&times;</button>
+      </div>
+      <form id="form-package-editor" class="modal-body-form">
+        <input type="hidden" id="edit-pkg-id">
+
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="pkg-code">Package Code *</label>
+            <input type="text" id="pkg-code" class="form-input" placeholder="e.g. PKG-MASTER" required>
+          </div>
+          <div class="form-field">
+            <label for="pkg-category">Category *</label>
+            <select id="pkg-category" class="form-input" required>
+              <option value="Full Body">Full Body</option>
+              <option value="Preventive Health">Preventive Health</option>
+              <option value="Women">Women</option>
+              <option value="Men">Men</option>
+              <option value="Senior">Senior</option>
+              <option value="Condition Based">Condition Based</option>
+              <option value="Diabetic Care">Diabetic Care</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="pkg-name">Package Title *</label>
+          <input type="text" id="pkg-name" class="form-input" placeholder="e.g. Master Full Body Health Checkup" required>
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-field">
+            <label for="pkg-mrp">MRP (₹) *</label>
+            <input type="number" step="1" min="0" id="pkg-mrp" class="form-input" placeholder="3500" required>
+          </div>
+          <div class="form-field">
+            <label for="pkg-price">Selling Price (₹) *</label>
+            <input type="number" step="1" min="0" id="pkg-price" class="form-input" placeholder="1499" required>
+          </div>
+          <div class="form-field">
+            <label for="pkg-b2b-cost">B2B Cost (₹) *</label>
+            <input type="number" step="1" min="0" id="pkg-b2b-cost" class="form-input" placeholder="450" required>
+          </div>
+        </div>
+
+        <div class="live-margin-preview" id="pkg-margin-preview">
+          Calculated Profit: <strong>₹1049</strong> | Margin: <strong>70.0%</strong>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Select Included Tests *</label>
+          <div class="package-test-picker-box" id="pkg-tests-container"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-pkg-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-3d">Save Package</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-modal-backdrop hidden" id="modal-report-uploader">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Verify & Publish Report</h2>
+        <button type="button" class="btn-close-modal" id="btn-close-report-modal">&times;</button>
+      </div>
+      <form id="form-report-uploader" class="modal-body-form">
+        <input type="hidden" id="report-booking-id">
+        <input type="hidden" id="report-patient-id">
+
+        <div class="patient-highlight-banner" id="report-modal-patient-info"></div>
+
+        <div class="form-field">
+          <label for="report-file-input">Signed PDF Report File *</label>
+          <input type="file" id="report-file-input" class="form-input-file" accept="application/pdf" required>
+          <span class="field-hint">Upload verified pathology PDF.</span>
+        </div>
+
+        <div class="form-field">
+          <label for="report-remarks">Pathologist Remarks / Verification Impression</label>
+          <textarea id="report-remarks" class="form-input" rows="2" placeholder="e.g. Normal haemoglobin levels. Verified by Dr. S. Mehta"></textarea>
+        </div>
+
+        <div class="form-checkbox-row">
+          <input type="checkbox" id="report-is-correction" value="1">
+          <label for="report-is-correction">Revised version (Increments version V1 → V2)</label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-report-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-3d" id="btn-submit-report-upload">Publish to Patient App</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-modal-backdrop hidden" id="modal-technician-editor">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-tech-title">Register Phlebotomist</h2>
+        <button type="button" class="btn-close-modal" id="btn-close-tech-modal">&times;</button>
+      </div>
+      <form id="form-tech-editor" class="modal-body-form">
+        <input type="hidden" id="edit-tech-id">
+
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="tech-name">Name *</label>
+            <input type="text" id="tech-name" class="form-input" placeholder="e.g. Ravi M." required>
+          </div>
+          <div class="form-field">
+            <label for="tech-phone">Mobile *</label>
+            <input type="tel" id="tech-phone" class="form-input" placeholder="e.g. 9876543210" required>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="tech-email">Staff Email</label>
+            <input type="email" id="tech-email" class="form-input" placeholder="tech@selfcare.com">
+          </div>
+          <div class="form-field">
+            <label for="tech-branch">Branch</label>
+            <select id="tech-branch" class="form-input">
+              <option value="Chennai">Chennai Hub</option>
+              <option value="Tiruvannamalai">Tiruvannamalai</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-field">
+            <label for="tech-lat">Latitude</label>
+            <input type="number" step="0.0001" id="tech-lat" class="form-input" value="12.9249" required>
+          </div>
+          <div class="form-field">
+            <label for="tech-lng">Longitude</label>
+            <input type="number" step="0.0001" id="tech-lng" class="form-input" value="80.2520" required>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <button type="button" class="btn btn-sm btn-outline-primary" id="btn-get-current-gps">📍 Use Device GPS Coordinates</button>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-tech-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-3d">Save Phlebotomist</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-modal-backdrop hidden" id="modal-booking-detail">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle"></div>
+      <div class="modal-header">
+        <h2 class="modal-title">Booking Details</h2>
+        <button type="button" class="btn-close-modal" id="btn-close-booking-modal">&times;</button>
+      </div>
+      <div class="modal-body-form" id="booking-detail-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-3d w-100" id="btn-close-booking-detail-footer">Close Order Card</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

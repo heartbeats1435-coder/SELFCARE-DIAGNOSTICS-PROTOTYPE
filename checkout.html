@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="description" content="Secure multi-step checkout and professional medical receipt generation for Selfcare Diagnostics.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare">
+
+  <title>Checkout &amp; Medical Receipt | Selfcare Diagnostics</title>
+
+  <!-- Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/customer.css">
+  <link rel="stylesheet" href="assets/css/checkout.css">
+</head>
+<body class="customer-body checkout-body">
+
+  <!-- Ambient Floating Background Blur Lights -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Main Mobile App Shell -->
+  <div class="customer-container">
+
+    <!-- Header Navigation Bar -->
+    <header class="customer-header">
+      <div class="header-main-row">
+        <!-- Left: Drawer Toggle & Brand Logo -->
+        <div class="header-left">
+          <button type="button" class="icon-nav-btn" id="btn-toggle-drawer" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="16" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <a href="customer.html" class="header-logo-link">
+            <img src="assets/images/logo.png" alt="Selfcare Diagnostics" class="header-logo-img">
+          </a>
+        </div>
+
+        <!-- Right: Location Pill, Notification Bell, User Avatar -->
+        <div class="header-right">
+          <!-- Location Pill -->
+          <button type="button" class="location-pill-btn" id="btn-select-location" aria-label="Select City">
+            <div class="loc-pin-col">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div class="loc-text-col">
+              <span class="loc-city-title">
+                <span id="current-location-text">Chennai</span>
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+              <span class="loc-badge-sub"><span class="pulse-dot"></span> Free Home Collection</span>
+            </div>
+          </button>
+
+          <!-- Notifications Bell -->
+          <button type="button" class="icon-nav-btn notif-btn" id="btn-notifications" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="notif-badge hidden" id="notification-badge-count">0</span>
+          </button>
+
+          <!-- User Avatar -->
+          <a href="profile.html" class="user-avatar-pill" id="header-avatar-link" aria-label="Go to Profile">
+            <span id="header-avatar-initials">SC</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Side Navigation Drawer -->
+    <div class="drawer-backdrop hidden" id="drawer-overlay"></div>
+    <aside class="side-drawer" id="nav-drawer" aria-hidden="true">
+      <div class="drawer-top-profile">
+        <div class="drawer-avatar" id="drawer-avatar-initials">SC</div>
+        <div class="drawer-user-meta">
+          <h3 class="drawer-name" id="drawer-user-name">Selfcare Patient</h3>
+          <p class="drawer-phone" id="drawer-user-phone">+91 7010174890</p>
+        </div>
+        <button type="button" class="btn-drawer-close" id="btn-close-drawer" aria-label="Close Drawer">&times;</button>
+      </div>
+
+      <nav class="drawer-nav-list">
+        <a href="customer.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home Dashboard</span>
+        </a>
+        <a href="tests.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/><path d="M7 14h10"/></svg>
+          <span>Book Lab Tests</span>
+        </a>
+        <a href="packages.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M12 10.5v6"/><path d="M9 13.5h6"/></svg>
+          <span>Health Packages</span>
+        </a>
+        <a href="reports.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/></svg>
+          <span>My Test Reports</span>
+        </a>
+        <a href="checkout.html" class="drawer-nav-item active">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span>My Cart &amp; Checkout</span>
+        </a>
+        <a href="profile.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile &amp; Family Members</span>
+        </a>
+        <a href="ai-assistant.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span>AI Health Explainer</span>
+        </a>
+
+        <div class="drawer-separator"></div>
+
+        <button type="button" class="drawer-nav-item drawer-logout-btn" id="btn-drawer-logout">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Sign Out</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Scrollable Content Container -->
+    <main class="customer-content pb-bottom-action-bar">
+
+      <!-- Top Wizard Progress Indicator -->
+      <div class="checkout-stepper-container" id="main-stepper-container">
+        <div class="stepper-wrapper">
+          <div class="stepper-line"><div class="stepper-line-progress" id="stepper-progress-fill" style="width: 25%;"></div></div>
+          <div class="step-item active" data-step-target="1">
+            <div class="step-number">1</div>
+            <span class="step-label">Cart</span>
+          </div>
+          <div class="step-item" data-step-target="2">
+            <div class="step-number">2</div>
+            <span class="step-label">Customer</span>
+          </div>
+          <div class="step-item" data-step-target="3">
+            <div class="step-number">3</div>
+            <span class="step-label">Address</span>
+          </div>
+          <div class="step-item" data-step-target="4">
+            <div class="step-number">4</div>
+            <span class="step-label">Payment</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Redesigned Premium 3D Glassmorphism Empty Cart State -->
+      <div class="empty-cart-state hidden" id="checkout-empty-state">
+        <div class="empty-cart-halo"></div>
+        <div class="empty-cart-3d-wrapper">
+          <div class="floating-cart-icon-3d">
+            <div class="cart-sparkle sparkle-1">✦</div>
+            <div class="cart-sparkle sparkle-2">✦</div>
+            <svg viewBox="0 0 24 24" width="58" height="58" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1.5"/>
+              <circle cx="20" cy="21" r="1.5"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              <path d="M12 9v4m-2-2h4" stroke-width="2"/>
+            </svg>
+            <div class="cart-shadow-ellipse"></div>
+          </div>
+        </div>
+
+        <div class="free-delivery-badge">
+          <span class="badge-icon">✨</span>
+          <span>Free Home Sample Collection across Chennai</span>
+        </div>
+
+        <h2 class="empty-title">Your Cart is Empty</h2>
+        <p class="empty-subtitle">Choose from 100+ NABL accredited medical lab tests &amp; comprehensive health checkup packages with doorstep sample collection.</p>
+        
+        <div class="empty-actions">
+          <a href="tests.html" class="btn-empty-primary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 3h6"/><path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/><path d="M7 14h10"/></svg>
+            <span>Browse Lab Tests</span>
+          </a>
+          <a href="packages.html" class="btn-empty-secondary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M12 10.5v6"/><path d="M9 13.5h6"/></svg>
+            <span>Explore Packages</span>
+          </a>
+        </div>
+
+        <!-- Quick Suggestions -->
+        <div class="empty-suggestions-box">
+          <span class="sugg-header">Popular lab tests:</span>
+          <div class="sugg-chips">
+            <a href="tests.html" class="sugg-chip">🩸 Complete Blood Count (CBC)</a>
+            <a href="tests.html" class="sugg-chip">🍬 Fasting Blood Sugar (FBS)</a>
+            <a href="tests.html" class="sugg-chip">🦋 Thyroid Profile (T3, T4, TSH)</a>
+            <a href="tests.html" class="sugg-chip">❤️ Lipid Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi-Step Wizard Form -->
+      <form id="checkout-form" class="checkout-wizard-form">
+
+        <!-- ================= STEP 1: CART + COLLECTION TYPE ================= -->
+        <div class="wizard-step-pane active" data-step="1">
+          <section class="checkout-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="step-badge">1</span>
+                <h2 class="card-title">Select Collection Type</h2>
+              </div>
+              <span class="free-pill-tag" id="collection-fee-tag">FREE HOME COLLECTION</span>
+            </div>
+            <div class="collection-type-selector">
+              <label class="type-option-card selected" id="card-type-home">
+                <input type="radio" name="collection-type" value="home" class="option-radio" checked>
+                <div class="option-details">
+                  <div class="opt-head-row">
+                    <h4>Home Collection</h4>
+                    <span class="mini-green-tag" id="home-col-cost-badge">FREE</span>
+                  </div>
+                  <p>Certified phlebotomist collects sample at doorstep</p>
+                </div>
+              </label>
+              <label class="type-option-card" id="card-type-lab">
+                <input type="radio" name="collection-type" value="lab" class="option-radio">
+                <div class="option-details">
+                  <div class="opt-head-row">
+                    <h4>Lab Walk-In</h4>
+                    <span class="mini-gray-tag">FREE</span>
+                  </div>
+                  <p>Walk-in directly to Selfcare diagnostic lab</p>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <section class="checkout-card" style="margin-top: 12px;">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <h2 class="card-title">Selected Tests &amp; Packages</h2>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="items-count-badge" id="cart-item-count">0 Items</span>
+                <button type="button" class="btn-text text-danger" id="btn-clear-cart" style="font-size: 0.72rem; font-weight: 800; background: none; border: none; cursor: pointer; color: #ef4444;">Clear All</button>
+              </div>
+            </div>
+
+            <!-- Dynamic Home Collection Banner -->
+            <div class="collection-policy-note" id="collection-policy-banner">
+              <span class="policy-icon">🎁</span>
+              <span class="policy-text" id="collection-policy-text">Home Sample Collection is completely <strong>FREE</strong> for all health packages and regular lab tests!</span>
+            </div>
+
+            <div class="cart-items-list" id="checkout-summary-items">
+              <!-- Rendered via JS -->
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= STEP 2: CUSTOMER SELECTION ================= -->
+        <div class="wizard-step-pane hidden" data-step="2">
+          <section class="checkout-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="step-badge">2</span>
+                <h2 class="card-title">Who is this booking for?</h2>
+              </div>
+            </div>
+            <div class="patients-radio-list" id="patient-selection-list" style="display: flex; flex-direction: column; gap: 8px;">
+              <!-- Dynamically populated patient options -->
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= STEP 3: ADDRESS & LOCATION ================= -->
+        <div class="wizard-step-pane hidden" data-step="3">
+          <!-- Home Collection Address Box -->
+          <section class="checkout-card" id="home-address-section">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="step-badge">3</span>
+                <h2 class="card-title">Collection Address</h2>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 8px;">
+              <label for="chk-address" class="form-label" style="font-size: 0.72rem; font-weight: 700; margin-bottom: 3px; display: block;">Flat / House No. / Street / Area *</label>
+              <input type="text" id="chk-address" class="form-input form-control" placeholder="e.g. 1093 5th cross street Mahatma Gandhi Nagar Vettuvankeni">
+            </div>
+            <div class="form-group" style="margin-bottom: 8px;">
+              <label for="chk-landmark" class="form-label" style="font-size: 0.72rem; font-weight: 700; margin-bottom: 3px; display: block;">Landmark</label>
+              <input type="text" id="chk-landmark" class="form-input form-control" placeholder="e.g. Near Metro Station">
+            </div>
+            <div class="form-row-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="chk-pincode" class="form-label" style="font-size: 0.72rem; font-weight: 700; margin-bottom: 3px; display: block;">Pincode *</label>
+                <input type="text" id="chk-pincode" class="form-input form-control" placeholder="6-digit Pincode" maxlength="6" pattern="[0-9]{6}" inputmode="numeric">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="chk-city" class="form-label" style="font-size: 0.72rem; font-weight: 700; margin-bottom: 3px; display: block;">City *</label>
+                <input type="text" id="chk-city" class="form-input form-control" value="Chennai">
+              </div>
+            </div>
+
+            <!-- Profile Page Style GPS Geolocation Field -->
+            <div class="form-group" style="margin-top: 8px; margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label for="chk-location" class="form-label" style="font-size: 0.72rem; font-weight: 700; margin-bottom: 0;">GPS Geolocation (Lat, Lng)</label>
+                <button type="button" id="btn-get-chk-location" class="btn-detect-gps">
+                  <span>📍</span>
+                  <span>Detect GPS</span>
+                </button>
+              </div>
+              <input type="text" id="chk-location" class="form-input form-control" placeholder="12.9249, 80.2520">
+            </div>
+          </section>
+
+          <!-- Lab Collection Info Box -->
+          <section class="checkout-card hidden" id="lab-collection-section">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="step-badge">3</span>
+                <h2 class="card-title">Laboratory Walk-In Center</h2>
+              </div>
+            </div>
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px; font-size: 0.74rem; color: #065f46;">
+              <strong>SELFCARE DIAGNOSTICS - CENTRAL LAB</strong><br>
+              <p style="margin-top: 4px; color: var(--sc-text-main);">No. 45, GST Road, Guindy, Chennai - 600032 (Near Guindy Metro Station).</p>
+              <p style="margin-top: 4px; font-weight: 700;">Timings: Open 24/7 for walk-in sample collections.</p>
+            </div>
+          </section>
+
+          <!-- Slot Picker (30-Min Intervals) -->
+          <section class="checkout-card" style="margin-top: 10px;">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <h2 class="card-title">Select Collection Date &amp; 30-Min Slot</h2>
+              </div>
+            </div>
+            <div class="slot-section" style="margin-bottom: 12px;">
+              <label class="slot-section-label" style="font-size: 0.72rem; font-weight: 700; display: block; margin-bottom: 6px;">Collection Date:</label>
+              <div class="scrollable-date-chips" id="date-chips-container" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;"></div>
+              <input type="date" id="booking-date" class="hidden">
+            </div>
+            <div class="slot-section" style="margin-bottom: 0;">
+              <label class="slot-section-label" style="font-size: 0.72rem; font-weight: 700; display: block; margin-bottom: 6px;">30-Minute Time Slot:</label>
+              <div class="time-slots-grid" id="time-slots-container"></div>
+              <select id="booking-slot" class="hidden"><option value="">Select slot</option></select>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= STEP 4: PAYMENT ================= -->
+        <div class="wizard-step-pane hidden" data-step="4">
+          <section class="checkout-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="step-badge">4</span>
+                <h2 class="card-title">Payment Method</h2>
+              </div>
+            </div>
+            <div class="payment-options-grid" style="display: flex; flex-direction: column; gap: 6px;">
+              <label class="payment-radio-card" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #fff; border: 1.2px solid var(--sc-border); border-radius: 10px; cursor: pointer;">
+                <input type="radio" name="payment_method" value="UPI" style="accent-color: var(--sc-green);">
+                <div class="payment-card-content" style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                  <span class="payment-icon" style="font-size: 1.1rem;">📱</span>
+                  <div class="payment-details" style="display: flex; flex-direction: column;">
+                    <span class="payment-title" style="font-size: 0.76rem; font-weight: 800; color: var(--sc-dark);">UPI / Google Pay / PhonePe / Paytm</span>
+                    <span class="payment-sub" style="font-size: 0.58rem; color: #009963; font-weight: 700;">🎁 10% Instant Online Payment Discount</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="payment-radio-card" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #fff; border: 1.2px solid var(--sc-border); border-radius: 10px; cursor: pointer;">
+                <input type="radio" name="payment_method" value="CARD" style="accent-color: var(--sc-green);">
+                <div class="payment-card-content" style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                  <span class="payment-icon" style="font-size: 1.1rem;">💳</span>
+                  <div class="payment-details" style="display: flex; flex-direction: column;">
+                    <span class="payment-title" style="font-size: 0.76rem; font-weight: 800; color: var(--sc-dark);">Credit / Debit Card</span>
+                    <span class="payment-sub" style="font-size: 0.58rem; color: #009963; font-weight: 700;">🎁 10% Instant Online Payment Discount</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="payment-radio-card" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #fff; border: 1.2px solid var(--sc-border); border-radius: 10px; cursor: pointer;">
+                <input type="radio" name="payment_method" value="COD" style="accent-color: var(--sc-green);">
+                <div class="payment-card-content" style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                  <span class="payment-icon" style="font-size: 1.1rem;">💵</span>
+                  <div class="payment-details" style="display: flex; flex-direction: column;">
+                    <span class="payment-title" style="font-size: 0.76rem; font-weight: 800; color: var(--sc-dark);">Pay at Collection (Cash / UPI)</span>
+                    <span class="payment-sub" style="font-size: 0.58rem; color: var(--sc-text-muted);">Pay phlebotomist when sample is drawn</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <!-- Coupon & Addon Section -->
+          <section class="checkout-card coupon-card" style="margin-top: 10px;">
+            <div class="coupon-header-row"><div class="coupon-title"><span>Apply Coupon Code</span></div></div>
+            <div class="coupon-input-group" style="display: flex; gap: 8px; margin-top: 8px;">
+              <input type="text" id="coupon-code-input" class="coupon-input form-control" placeholder="Enter coupon code (e.g. SELFCARE100)" style="text-transform: uppercase;">
+              <button type="button" class="btn btn-primary btn-sm" id="btn-apply-coupon" style="padding: 6px 14px; font-size: 0.74rem;">Apply</button>
+            </div>
+            <p class="coupon-status-msg hidden" id="coupon-message" style="font-size: 0.68rem; margin-top: 4px;"></p>
+          </section>
+
+          <section class="checkout-card addon-card" style="margin-top: 10px;">
+            <label class="addon-toggle-row" for="chk-hardcopy-report" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+              <div class="addon-info">
+                <span class="addon-title" style="font-size: 0.76rem; font-weight: 800; display: block; color: var(--sc-dark);">📄 Request Physical Hardcopy Report</span>
+                <span class="addon-desc" style="font-size: 0.58rem; color: var(--sc-text-muted); display: block; margin-top: 2px;">Delivered to your address via courier (+₹50).</span>
+              </div>
+              <div class="addon-control" style="display: flex; align-items: center; gap: 8px;">
+                <span class="addon-price" style="font-size: 0.74rem; font-weight: 800; color: var(--sc-dark);">+ ₹50</span>
+                <input type="checkbox" id="chk-hardcopy-report" class="custom-checkbox" style="width: 16px; height: 16px; accent-color: var(--sc-green);">
+              </div>
+            </label>
+          </section>
+
+          <!-- Detailed Bill Summary -->
+          <section class="checkout-card bill-summary-card" style="margin-top: 10px;">
+            <h3 class="bill-summary-title">Bill Details</h3>
+            <div class="bill-row">
+              <span>Item Total (MRP)</span>
+              <span id="bill-mrp-total" class="bill-mrp-striked">₹0</span>
+            </div>
+            <div class="bill-row">
+              <span>Item Price</span>
+              <span id="bill-item-price" class="bill-item-net">₹0</span>
+            </div>
+            <div class="bill-row text-success">
+              <span>Item Discount</span>
+              <span id="bill-mrp-discount">- ₹0</span>
+            </div>
+            <div class="bill-row text-success hidden" id="row-coupon-discount">
+              <span>Coupon Discount (<strong id="applied-coupon-name"></strong>)</span>
+              <span id="bill-coupon-discount">- ₹0</span>
+            </div>
+            <div class="bill-row text-success hidden" id="row-online-discount">
+              <span>Online Payment Discount (10%)</span>
+              <span id="bill-online-discount">- ₹0</span>
+            </div>
+            <div class="bill-row">
+              <span>Home Collection Fee</span>
+              <span class="text-success font-bold" id="bill-collection-fee">FREE</span>
+            </div>
+            <div class="bill-row hidden" id="row-hardcopy-fee">
+              <span>Hardcopy Report Delivery</span>
+              <span>₹50</span>
+            </div>
+            <div class="divider-line"></div>
+            <div class="bill-row bill-total-row">
+              <strong>To Pay Total</strong>
+              <strong class="total-amount-display" id="bill-final-payable">₹0</strong>
+            </div>
+            <div class="savings-highlight-banner" id="total-savings-banner">
+              🎉 Total Savings: <span id="bill-total-savings">₹0</span>
+            </div>
+          </section>
+        </div>
+
+      </form>
+
+      <!-- ================= SUCCESS MEDICAL RECEIPT VIEW ================= -->
+      <div class="hidden" id="booking-success-receipt-view">
+        <div class="receipt-print-wrapper" id="medical-receipt-container" style="background: #ffffff; border: 1.5px solid var(--sc-border); border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px;">
+          
+          <!-- Receipt Header -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #009963; padding-bottom: 12px; margin-bottom: 14px;">
+            <div>
+              <h2 style="font-size: 1.1rem; font-weight: 900; color: #009963; letter-spacing: 0.02em;">SELFCARE DIAGNOSTICS</h2>
+              <p style="font-size: 0.62rem; font-weight: 700; color: var(--sc-text-muted);">Empowering Wellness • Diagnostic Centre &amp; Medical Laboratory</p>
+            </div>
+            <div style="text-align: right;">
+              <span style="background: #d1fae5; color: #047857; font-size: 0.60rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 4px;">BOOKING CONFIRMED</span>
+              <p style="font-size: 0.64rem; color: #0f172a; font-weight: 800;" id="receipt-booking-id">Booking ID: SCD-BK-202609000001</p>
+              <p style="font-size: 0.64rem; color: #009963; font-weight: 800;" id="receipt-invoice-id">Invoice No: SCD-IN-000001</p>
+              <p style="font-size: 0.58rem; color: var(--sc-text-muted);" id="receipt-booking-date">Date: 08-Sep-2026</p>
+            </div>
+          </div>
+
+          <!-- Patient Details Box -->
+          <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px;">
+            <h4 style="font-size: 0.72rem; font-weight: 800; color: var(--sc-dark); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em;">Patient Details</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.68rem; color: var(--sc-text-main);">
+              <div><span>Patient ID:</span> <strong id="rcpt-patient-id">CUST-101</strong></div>
+              <div><span>Name:</span> <strong id="rcpt-patient-name">Mohamed Adamkani</strong></div>
+              <div><span>Age / Gender:</span> <strong id="rcpt-patient-demo">27 Y / Male</strong></div>
+              <div><span>Phone:</span> <strong id="rcpt-patient-phone">+91 7010174890</strong></div>
+            </div>
+          </div>
+
+          <!-- Collection Details Box -->
+          <div style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px;">
+            <h4 style="font-size: 0.72rem; font-weight: 800; color: var(--sc-dark); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em;">Collection Details</h4>
+            <div style="font-size: 0.68rem; color: var(--sc-text-main); display: flex; flex-direction: column; gap: 4px;">
+              <div><span>Type:</span> <strong id="rcpt-collection-type">Home Collection</strong></div>
+              <div id="rcpt-address-row"><span>Address:</span> <strong id="rcpt-address-text">-</strong></div>
+              <div><span>Scheduled Slot:</span> <strong id="rcpt-slot-text">-</strong></div>
+            </div>
+          </div>
+
+          <!-- Booked Services -->
+          <div style="margin-bottom: 14px;">
+            <h4 style="font-size: 0.72rem; font-weight: 800; color: var(--sc-dark); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em;">Booked Services</h4>
+            <div id="rcpt-services-container" style="display: flex; flex-direction: column; gap: 6px;"></div>
+          </div>
+
+          <!-- Bill Summary & Payment Box -->
+          <div style="background: #fdfdfd; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; font-size: 0.70rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--sc-text-muted);">
+              <span>Subtotal</span><span id="rcpt-subtotal">₹0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #009963;" id="rcpt-row-coupon">
+              <span>Coupon Discount</span><span id="rcpt-coupon-disc">- ₹0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #009963;" id="rcpt-row-online">
+              <span>Online Payment Discount (10%)</span><span id="rcpt-online-disc">- ₹0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--sc-text-muted);">
+              <span>Home Collection Fee</span><span id="rcpt-col-fee" class="text-success font-bold">FREE</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--sc-text-muted);" id="rcpt-row-hardcopy">
+              <span>Hardcopy Addon</span><span id="rcpt-hardcopy-fee">₹0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #009963; font-weight: 800;" id="rcpt-row-savings">
+              <span>Total Savings</span><span id="rcpt-total-savings">₹0</span>
+            </div>
+            <div style="height: 1px; background: #cbd5e1; margin: 8px 0;"></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.90rem; font-weight: 900; color: var(--sc-dark);">
+              <span>Total Payable</span><span id="rcpt-final-total" style="color: #009963;">₹0</span>
+            </div>
+            <div style="margin-top: 8px; font-size: 0.64rem; color: var(--sc-text-muted); display: flex; justify-content: space-between;">
+              <span>Payment Method: <strong id="rcpt-pay-method">UPI</strong></span>
+              <span>Payment Status: <strong id="rcpt-pay-status" style="color: #d97706;">Pending</strong></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Receipt Action Buttons -->
+        <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+          <button type="button" class="btn btn-outline-secondary btn-lg" id="btn-print-receipt" style="flex: 1;">🖨️ Print Receipt</button>
+          <a href="reports.html" class="btn btn-primary btn-lg" style="flex: 1; text-align: center; text-decoration: none;">View Reports</a>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Sticky Floating Action Dock -->
+    <div class="bottom-checkout-dock" id="bottom-action-bar">
+      <!-- Back Button -->
+      <button type="button" class="dock-back-btn" id="btn-wizard-back" aria-label="Go Back">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>Back</span>
+      </button>
+
+      <!-- Center Pillar -->
+      <div class="dock-info-pill" id="bar-price-container">
+        <span class="dock-info-sub" id="bar-label-text">Cart Items</span>
+        <span class="dock-info-main" id="bar-payable-amount">₹0</span>
+      </div>
+
+      <!-- Forward / Confirm Action Button -->
+      <button type="button" class="dock-continue-btn" id="btn-wizard-next">
+        <span id="btn-wizard-text">Continue</span>
+        <span class="dock-btn-icon">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <!-- Fixed Bottom Navigation Bar -->
+    <nav class="customer-bottom-nav">
+      <a href="customer.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="nav-item-label">Home</span>
+      </a>
+      <a href="tests.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6"/><path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/><path d="M7 14h10"/>
+        </svg>
+        <span class="nav-item-label">Tests</span>
+      </a>
+      <a href="packages.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M12 10.5v6"/><path d="M9 13.5h6"/>
+        </svg>
+        <span class="nav-item-label">Packages</span>
+      </a>
+      <a href="reports.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/>
+        </svg>
+        <span class="nav-item-label">Reports</span>
+      </a>
+      <a href="checkout.html" class="nav-item position-relative active">
+        <div class="nav-icon-badge-box">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="nav-badge hidden" id="bottom-cart-badge">0</span>
+        </div>
+        <span class="nav-item-label">Cart</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- Location Picker Modal -->
+  <div class="modal-backdrop hidden" id="location-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Your City</h3>
+        <button type="button" class="modal-close" id="btn-close-location-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="location-search-box">
+          <input type="text" id="city-search-input" class="form-control" placeholder="Search city name...">
+        </div>
+        <div class="popular-cities-grid">
+          <button type="button" class="city-btn active" data-city="Chennai"><span class="city-name">Chennai</span></button>
+          <button type="button" class="city-btn" data-city="Tiruvannamalai"><span class="city-name">Tiruvannamalai</span></button>
+          <button type="button" class="city-btn" data-city="Coimbatore"><span class="city-name">Coimbatore</span></button>
+          <button type="button" class="city-btn" data-city="Madurai"><span class="city-name">Madurai</span></button>
+          <button type="button" class="city-btn" data-city="Bengaluru"><span class="city-name">Bengaluru</span></button>
+          <button type="button" class="city-btn" data-city="Hyderabad"><span class="city-name">Hyderabad</span></button>
+          <button type="button" class="city-btn" data-city="Kochi"><span class="city-name">Kochi</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Modal -->
+  <div class="modal-backdrop hidden" id="notifications-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Notifications</h3>
+        <button type="button" class="modal-close" id="btn-close-notif-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="notif-item">
+          <span class="notif-dot green"></span>
+          <div class="notif-text">
+            <strong>10% Online Payment Discount Active</strong>
+            <p>Pay online using UPI or Cards to get 10% instant discount.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Banner -->
+  <div class="toast-banner hidden" id="customer-toast" role="status" aria-live="polite">
+    <span id="toast-message">Message</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/checkout.js"></script>
+</body>
+</html>

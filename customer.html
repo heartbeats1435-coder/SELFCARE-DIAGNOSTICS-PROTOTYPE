@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="description" content="Selfcare Diagnostics - Empowering Wellness. Book lab tests, health packages, and doorstep sample collections.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare">
+
+  <title>Dashboard | Selfcare Diagnostics</title>
+
+  <!-- Favicon & Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/customer.css">
+</head>
+<body class="customer-body">
+
+  <!-- Ambient Floating Background Blur Lights -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Main Mobile App Shell -->
+  <div class="customer-container">
+
+    <!-- Header Navigation Bar -->
+    <header class="customer-header">
+      <div class="header-main-row">
+        <!-- Left: Drawer Toggle & Brand Logo -->
+        <div class="header-left">
+          <button type="button" class="icon-nav-btn" id="btn-toggle-drawer" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="16" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <a href="customer.html" class="header-logo-link">
+            <img src="assets/images/logo.png" alt="Selfcare Diagnostics" class="header-logo-img">
+          </a>
+        </div>
+
+        <!-- Right: Location Pill, Notification Bell, User Avatar -->
+        <div class="header-right">
+          <!-- Location Pill -->
+          <button type="button" class="location-pill-btn" id="btn-select-location" aria-label="Select City">
+            <div class="loc-pin-col">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div class="loc-text-col">
+              <span class="loc-city-title">
+                <span id="current-location-text">Chennai</span>
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+              <span class="loc-badge-sub"><span class="pulse-dot"></span> Home Collection</span>
+            </div>
+          </button>
+
+          <!-- Notifications Bell -->
+          <button type="button" class="icon-nav-btn notif-btn" id="btn-notifications" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="notif-badge hidden" id="notification-badge-count">0</span>
+          </button>
+
+          <!-- User Avatar -->
+          <a href="profile.html" class="user-avatar-pill" id="header-avatar-link" aria-label="Go to Profile">
+            <span id="header-avatar-initials">SC</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Side Navigation Drawer -->
+    <div class="drawer-backdrop hidden" id="drawer-overlay"></div>
+    <aside class="side-drawer" id="nav-drawer" aria-hidden="true">
+      <div class="drawer-top-profile">
+        <div class="drawer-avatar" id="drawer-avatar-initials">SC</div>
+        <div class="drawer-user-meta">
+          <h3 class="drawer-name" id="drawer-user-name">Selfcare Patient</h3>
+          <p class="drawer-phone" id="drawer-user-phone">+91 7010174890</p>
+        </div>
+        <button type="button" class="btn-drawer-close" id="btn-close-drawer" aria-label="Close Drawer">&times;</button>
+      </div>
+
+      <nav class="drawer-nav-list">
+        <a href="customer.html" class="drawer-nav-item active">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home Dashboard</span>
+        </a>
+        <a href="tests.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/><path d="M7 14h10"/></svg>
+          <span>Book Lab Tests</span>
+        </a>
+        <a href="packages.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M12 10.5v6"/><path d="M9 13.5h6"/></svg>
+          <span>Health Packages</span>
+        </a>
+        <a href="reports.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/></svg>
+          <span>My Test Reports</span>
+        </a>
+        <a href="checkout.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span>My Cart</span>
+        </a>
+        <a href="profile.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile &amp; Family Members</span>
+        </a>
+        <a href="ai-assistant.html" class="drawer-nav-item" id="drawer-ai-link">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span>AI Health Explainer</span>
+        </a>
+
+        <div class="drawer-separator"></div>
+
+        <button type="button" class="drawer-nav-item drawer-logout-btn" id="btn-drawer-logout">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Sign Out</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Scrollable Dashboard Content -->
+    <main class="customer-content">
+
+      <!-- SECTION 1: Dynamic Dual Search (Tests + Health Packages) -->
+      <section class="search-section-wrap">
+        <div class="search-input-pill" id="search-input-container">
+          <span class="search-lens-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </span>
+          <input 
+            type="text" 
+            id="home-search-input" 
+            class="home-search-field" 
+            placeholder="Search tests, packages, health checkups..."
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="button" class="btn-clear-search hidden" id="btn-clear-search" aria-label="Clear Search">&times;</button>
+          <button type="button" class="btn-filter-trigger" id="btn-open-filter" aria-label="Search Filter">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Dynamic Live Search Results Overlay Panel -->
+        <div class="search-results-panel hidden" id="search-results-panel">
+          <div class="search-results-header">
+            <span class="results-count-text" id="search-results-count">Results</span>
+            <button type="button" class="btn-text-close-search" id="btn-close-search-panel">Close</button>
+          </div>
+          <div class="search-results-list" id="search-results-list"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 1.5: AI Prescription Scanner Card -->
+      <section class="prescription-scanner-section">
+        <div class="prescription-upload-card" id="prescription-drop-card">
+          <div class="rx-card-badge">✨ AI BLOOD TEST SCANNER</div>
+          <div class="rx-card-content">
+            <div class="rx-card-text">
+              <h3 class="rx-card-title">Upload Doctor's Prescription</h3>
+              <p class="rx-card-desc">Upload doctor's prescription. AI will detect blood tests &amp; add them directly to your cart.</p>
+              <div class="rx-card-actions">
+                <button type="button" class="btn-upload-rx" id="btn-trigger-rx-upload">
+                  <span>📷 Upload Prescription</span>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+                <span class="rx-file-types">JPG, PNG, WEBP, PDF (Max 15MB)</span>
+              </div>
+            </div>
+            <div class="rx-card-graphic">
+              <div class="rx-scanner-orb">📋</div>
+            </div>
+          </div>
+          <input type="file" id="prescription-file-input" accept="image/jpeg,image/png,image/webp,application/pdf" class="hidden">
+        </div>
+      </section>
+
+      <!-- SECTION 2: Hero Advertisement Carousel -->
+      <section class="ad-carousel-section">
+        <div class="ad-carousel-container" id="ad-carousel">
+          <div class="ad-carousel-track" id="ad-carousel-track">
+            
+            <div class="ad-slide" data-slide-url="packages.html?category=all">
+              <div class="ad-slide-inner ad-theme-emerald">
+                <div class="ad-content">
+                  <span class="ad-badge">RECOMMENDED</span>
+                  <h3 class="ad-title">Full Body Checkup</h3>
+                  <p class="ad-subtitle">60+ Vital Parameters Included</p>
+                  <div class="ad-footer-row">
+                    <span class="ad-price-tag">Starting <strong>₹999</strong></span>
+                    <span class="ad-cta-btn">Book Now &rsaquo;</span>
+                  </div>
+                </div>
+                <div class="ad-graphic-bubble">🩸</div>
+              </div>
+            </div>
+
+            <div class="ad-slide" data-slide-url="tests.html?category=all">
+              <div class="ad-slide-inner ad-theme-teal">
+                <div class="ad-content">
+                  <span class="ad-badge">FAST REPORTS</span>
+                  <h3 class="ad-title">Essential Blood Tests</h3>
+                  <p class="ad-subtitle">Sugar, CBC, Thyroid, Lipid, KFT</p>
+                  <div class="ad-footer-row">
+                    <span class="ad-price-tag">Tests Starting <strong>₹40</strong></span>
+                    <span class="ad-cta-btn">Explore &rsaquo;</span>
+                  </div>
+                </div>
+                <div class="ad-graphic-bubble">🔬</div>
+              </div>
+            </div>
+
+            <div class="ad-slide" data-slide-url="checkout.html?type=home_collection">
+              <div class="ad-slide-inner ad-theme-blue">
+                <div class="ad-content">
+                  <span class="ad-badge">DOORSTEP CARE</span>
+                  <h3 class="ad-title">Home Sample Collection</h3>
+                  <p class="ad-subtitle">Certified Phlebotomists at Your Home</p>
+                  <div class="ad-footer-row">
+                    <span class="ad-price-tag">Slots <strong>Available 24/7</strong></span>
+                    <span class="ad-cta-btn">Book Slot &rsaquo;</span>
+                  </div>
+                </div>
+                <div class="ad-graphic-bubble">🏠</div>
+              </div>
+            </div>
+
+            <div class="ad-slide" data-slide-url="packages.html">
+              <div class="ad-slide-inner ad-theme-purple">
+                <div class="ad-content">
+                  <span class="ad-badge">FAMILY HEALTH</span>
+                  <h3 class="ad-title">Complete Health Packages</h3>
+                  <p class="ad-subtitle">Tailored for Men, Women &amp; Senior Citizens</p>
+                  <div class="ad-footer-row">
+                    <span class="ad-price-tag">Save up to <strong>60%</strong></span>
+                    <span class="ad-cta-btn">View All &rsaquo;</span>
+                  </div>
+                </div>
+                <div class="ad-graphic-bubble">❤️</div>
+              </div>
+            </div>
+
+            <div class="ad-slide" data-slide-url="packages.html?category=condition">
+              <div class="ad-slide-inner ad-theme-pink">
+                <div class="ad-content">
+                  <span class="ad-badge">SPECIAL OFFER</span>
+                  <h3 class="ad-title">Vitamin D3 + B12 Combo</h3>
+                  <p class="ad-subtitle">Bone Density &amp; Immunity Wellness</p>
+                  <div class="ad-footer-row">
+                    <span class="ad-price-tag">Special Combo <strong>₹1,499</strong></span>
+                    <span class="ad-cta-btn">Claim Offer &rsaquo;</span>
+                  </div>
+                </div>
+                <div class="ad-graphic-bubble">💊</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="ad-carousel-dots" id="ad-carousel-dots">
+            <button type="button" class="ad-dot active" aria-label="Slide 1"></button>
+            <button type="button" class="ad-dot" aria-label="Slide 2"></button>
+            <button type="button" class="ad-dot" aria-label="Slide 3"></button>
+            <button type="button" class="ad-dot" aria-label="Slide 4"></button>
+            <button type="button" class="ad-dot" aria-label="Slide 5"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Pay Online & Get 10% OFF Banner -->
+      <section class="offer-promo-card">
+        <div class="offer-promo-left">
+          <div class="offer-pill-badge">ONLINE PAYMENT OFFER</div>
+          <h2 class="offer-discount-title">
+            Pay Online &amp; Get <span class="discount-bold">10% OFF</span>
+          </h2>
+          <p class="offer-discount-sub">On all diagnostic tests &amp; health packages</p>
+        </div>
+        <div class="offer-promo-action">
+          <a href="tests.html" class="btn-pay-now-pink" id="btn-claim-online-offer">
+            <span>Book Now</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Popular Categories -->
+      <section class="dashboard-section">
+        <div class="section-title-bar">
+          <h2 class="section-heading">Popular Categories</h2>
+          <a href="tests.html" class="section-view-all">View All &rsaquo;</a>
+        </div>
+
+        <div class="categories-circles-grid" id="popular-categories-container">
+          <button type="button" class="category-circle-item" data-category="diabetes">
+            <div class="circle-bubble bg-blue-tint">🩺</div>
+            <span class="circle-label">Diabetes</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="thyroid">
+            <div class="circle-bubble bg-amber-tint">🦋</div>
+            <span class="circle-label">Thyroid</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="lipid">
+            <div class="circle-bubble bg-red-tint">❤️</div>
+            <span class="circle-label">Lipid Profile</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="liver">
+            <div class="circle-bubble bg-purple-tint">🫁</div>
+            <span class="circle-label">Liver</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="kidney">
+            <div class="circle-bubble bg-blue-tint">💧</div>
+            <span class="circle-label">Kidney</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="vitamins">
+            <div class="circle-bubble bg-amber-tint">💊</div>
+            <span class="circle-label">Vitamins</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="hematology">
+            <div class="circle-bubble bg-red-tint">🩸</div>
+            <span class="circle-label">Hematology</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="hormones">
+            <div class="circle-bubble bg-pink-tint">⚡</div>
+            <span class="circle-label">Hormones</span>
+          </button>
+          <button type="button" class="category-circle-item" data-category="fever">
+            <div class="circle-bubble bg-green-tint">🤒</div>
+            <span class="circle-label">Infection / Fever</span>
+          </button>
+          <a href="tests.html" class="category-circle-item">
+            <div class="circle-bubble bg-neutral-tint">::</div>
+            <span class="circle-label">More</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION 5: Health Packages For You -->
+      <section class="dashboard-section">
+        <div class="section-title-bar">
+          <h2 class="section-heading">Health Packages For You</h2>
+          <a href="packages.html" class="section-view-all">View All &rsaquo;</a>
+        </div>
+
+        <div class="packages-scroll-track" id="packages-cards-track">
+          <div class="package-theme-card theme-pink" data-package-target="women">
+            <div class="pkg-meta-top">
+              <span class="pkg-micro-badge">WOMEN'S HEALTH</span>
+              <h3 class="pkg-theme-title">Women Packages</h3>
+              <p class="pkg-theme-desc">Care for every stage of life</p>
+            </div>
+            <div class="pkg-photo-box">
+              <img src="assets/images/women-package.webp" alt="Women Health Packages" class="pkg-real-photo" loading="lazy">
+              <button type="button" class="pkg-arrow-btn" aria-label="Explore Women Packages">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="package-theme-card theme-blue" data-package-target="men">
+            <div class="pkg-meta-top">
+              <span class="pkg-micro-badge">MEN'S HEALTH</span>
+              <h3 class="pkg-theme-title">Men Packages</h3>
+              <p class="pkg-theme-desc">Stay strong, stay healthy</p>
+            </div>
+            <div class="pkg-photo-box">
+              <img src="assets/images/men-package.webp" alt="Men Health Packages" class="pkg-real-photo" loading="lazy">
+              <button type="button" class="pkg-arrow-btn" aria-label="Explore Men Packages">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="package-theme-card theme-green" data-package-target="senior">
+            <div class="pkg-meta-top">
+              <span class="pkg-micro-badge">SENIOR CARE</span>
+              <h3 class="pkg-theme-title">Senior Packages</h3>
+              <p class="pkg-theme-desc">Health &amp; care for golden years</p>
+            </div>
+            <div class="pkg-photo-box">
+              <img src="assets/images/senior-package.webp" alt="Senior Care Packages" class="pkg-real-photo" loading="lazy">
+              <button type="button" class="pkg-arrow-btn" aria-label="Explore Senior Packages">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="package-theme-card theme-purple" data-package-target="condition">
+            <div class="pkg-meta-top">
+              <span class="pkg-micro-badge">CONDITION BASED</span>
+              <h3 class="pkg-theme-title">Condition Based</h3>
+              <p class="pkg-theme-desc">Targeted care for better health</p>
+            </div>
+            <div class="pkg-photo-box">
+              <img src="assets/images/condition-package.webp" alt="Condition Based Packages" class="pkg-real-photo" loading="lazy">
+              <button type="button" class="pkg-arrow-btn" aria-label="Explore Condition Packages">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Corporate Health Checkups -->
+      <section class="section-block" id="corporate-section">
+        <div class="corporate-banner-card">
+          <div class="corporate-banner-content">
+            <div class="corporate-badge">FOR WORKPLACES</div>
+            <h2 class="corporate-title">Corporate Health Checkups</h2>
+            <p class="corporate-desc">Protect your workforce with customized wellness programs, on-site health camps, and special corporate pricing.</p>
+            <ul class="corporate-benefits">
+              <li>✓ On-site Blood Sample Collection Camps</li>
+              <li>✓ Digital Employee Health Dashboard</li>
+              <li>✓ Dedicated Relationship Manager</li>
+            </ul>
+            <button type="button" class="btn btn-corporate-enquire" id="btn-corporate-enquire">
+              <span>Get Corporate Quote</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <div class="corporate-image-wrap">
+            <img
+              src="assets/images/corporate-team.webp"
+              alt="Corporate Health Checkups Team"
+              class="corporate-team-img"
+              loading="lazy"
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: Quick Services -->
+      <section class="quick-services-section">
+        <a href="checkout.html" class="quick-service-pill-card" id="btn-qs-bookings">
+          <div class="qs-bubble qs-emerald">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="qs-text-meta">
+            <span class="qs-title">My Bookings</span>
+            <span class="qs-desc">View upcoming bookings</span>
+          </div>
+        </a>
+
+        <a href="reports.html" class="quick-service-pill-card" id="btn-qs-reports">
+          <div class="qs-bubble qs-blue">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/></svg>
+          </div>
+          <div class="qs-text-meta">
+            <span class="qs-title">My Reports</span>
+            <span class="qs-desc">View &amp; download reports</span>
+          </div>
+        </a>
+
+        <a href="checkout.html?type=home_collection" class="quick-service-pill-card" id="btn-qs-home-coll">
+          <div class="qs-bubble qs-green">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="qs-text-meta">
+            <span class="qs-title">Home Collection</span>
+            <span class="qs-desc">Book sample collection</span>
+          </div>
+        </a>
+
+        <a href="tel:+917010174890" class="quick-service-pill-card" id="btn-qs-support">
+          <div class="qs-bubble qs-pink">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          </div>
+          <div class="qs-text-meta">
+            <span class="qs-title">Support 24/7</span>
+            <span class="qs-desc">We're here to help you</span>
+          </div>
+        </a>
+      </section>
+
+    </main>
+
+    <!-- 3D AI ASSISTANT FLOATING ACTION BUTTON (ENTRY POINT TO AI-ASSISTANT.HTML) -->
+    <div class="customer-ai-fab-wrapper" id="customer-ai-fab-container">
+      <button 
+        type="button" 
+        class="customer-ai-fab" 
+        id="customer-ai-fab" 
+        aria-label="Open AI Health Assistant" 
+        title="Ask Selfcare AI"
+      >
+        <div class="customer-ai-orb" aria-hidden="true">
+          <div class="customer-ai-glow"></div>
+          <div class="customer-ai-ring"></div>
+          <div class="customer-ai-core">
+            <svg class="customer-ai-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </div>
+        </div>
+        <div class="customer-ai-label-col">
+          <span class="customer-ai-label">Ask AI</span>
+          <span class="customer-ai-status">
+            <span class="customer-ai-dot"></span>
+            <span>Selfcare AI</span>
+          </span>
+        </div>
+      </button>
+    </div>
+
+    <!-- SECTION 8: Fixed Bottom Navigation Bar -->
+    <nav class="customer-bottom-nav">
+      <a href="customer.html" class="nav-item active">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="nav-item-label">Home</span>
+      </a>
+
+      <a href="tests.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6"/>
+          <path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/>
+          <path d="M7 14h10"/>
+        </svg>
+        <span class="nav-item-label">Tests</span>
+      </a>
+
+      <a href="packages.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          <rect x="3" y="7" width="18" height="13" rx="3"/>
+          <path d="M12 10.5v6"/>
+          <path d="M9 13.5h6"/>
+        </svg>
+        <span class="nav-item-label">Packages</span>
+      </a>
+
+      <a href="reports.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/>
+        </svg>
+        <span class="nav-item-label">Reports</span>
+      </a>
+
+      <a href="checkout.html" class="nav-item position-relative" id="bottom-cart-nav-link">
+        <div class="nav-icon-badge-box" id="bottom-cart-nav-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="nav-badge hidden" id="bottom-cart-badge">0</span>
+        </div>
+        <span class="nav-item-label">Cart</span>
+      </a>
+
+      <a href="profile.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. AI Prescription Scanner Modal Sheet -->
+  <div class="modal-backdrop hidden" id="prescription-modal" role="dialog" aria-modal="true" aria-labelledby="rx-modal-title">
+    <div class="modal-card rx-modal-sheet">
+      <div class="modal-header">
+        <div class="rx-header-info">
+          <span class="rx-micro-pill">OCR &amp; AI BLOOD TEST DETECTOR</span>
+          <h3 class="modal-title" id="rx-modal-title">Doctor's Prescription</h3>
+        </div>
+        <button type="button" class="modal-close" id="btn-close-rx-modal" aria-label="Close prescription modal">&times;</button>
+      </div>
+
+      <div class="modal-body rx-modal-scrollable">
+        
+        <!-- State 1: Preview State -->
+        <div class="rx-flow-pane" id="rx-preview-state">
+          <div class="rx-file-preview-box">
+            <img src="" alt="Prescription Preview" id="rx-preview-img" class="rx-preview-img hidden">
+            <div class="rx-pdf-doc-icon hidden" id="rx-preview-pdf">
+              <span class="pdf-icon-large">📄</span>
+              <strong id="rx-pdf-name">prescription.pdf</strong>
+              <span id="rx-pdf-size">PDF Document</span>
+            </div>
+          </div>
+          <div class="rx-actions-col">
+            <button type="button" class="btn btn-primary btn-block btn-lg" id="btn-analyze-rx">
+              <span>⚡ Analyze Blood Tests with AI</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-block" id="btn-reselect-rx">
+              Change Image / File
+            </button>
+          </div>
+        </div>
+
+        <!-- State 2: AI Scanning State -->
+        <div class="rx-flow-pane hidden" id="rx-scanning-state">
+          <div class="rx-scanning-visual">
+            <div class="rx-radar-container">
+              <div class="rx-radar-ring ring-1"></div>
+              <div class="rx-radar-ring ring-2"></div>
+              <div class="rx-scanner-beam"></div>
+              <span class="rx-scan-core-icon">🔬</span>
+            </div>
+            <h4 class="rx-scanning-heading">Reading Prescription with AI...</h4>
+            <div class="rx-progress-timeline">
+              <div class="rx-scan-step" id="step-scan-1"><span class="step-dot active"></span> Optical OCR recognition</div>
+              <div class="rx-scan-step" id="step-scan-2"><span class="step-dot"></span> Filtering out medicines &amp; imaging</div>
+              <div class="rx-scan-step" id="step-scan-3"><span class="step-dot"></span> Matching with Selfcare test catalog</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State 2.5: Error State (No fake fallback) -->
+        <div class="rx-flow-pane hidden" id="rx-error-state">
+          <div class="rx-error-box">
+            <div class="rx-error-bubble">⚠️</div>
+            <h4 class="rx-error-title" id="rx-error-title">Analysis Unavailable</h4>
+            <p class="rx-error-desc" id="rx-error-desc">Prescription analysis is temporarily unavailable. Please try again or add tests manually.</p>
+            <div class="rx-error-actions">
+              <button type="button" class="btn btn-primary btn-block" id="btn-retry-rx-analysis">🔄 Retry Analysis</button>
+              <button type="button" class="btn btn-secondary btn-block" id="btn-reselect-rx-error">Change Image / File</button>
+              <a href="tests.html" class="btn-link-manual" id="btn-manual-add-tests-error">+ Browse &amp; Add Tests Manually</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- State 3: Detected Tests Review & Selection State -->
+        <div class="rx-flow-pane hidden" id="rx-results-state">
+          <div class="rx-results-header-box">
+            <div class="rx-results-found-count">
+              <span class="rx-found-icon">🧪</span>
+              <div>
+                <strong id="rx-tests-found-title">Blood Tests Found</strong>
+                <p>Select tests to add to your booking cart</p>
+              </div>
+            </div>
+            <span class="rx-badge-count" id="rx-tests-count-badge">0 Found</span>
+          </div>
+
+          <!-- Package Suggestion Banner -->
+          <div class="rx-package-value-banner hidden" id="rx-package-suggestion-box">
+            <div class="rx-pkg-content">
+              <span class="rx-pkg-tag">💡 VALUE RECOMMENDATION</span>
+              <h4 class="rx-pkg-title" id="rx-suggested-pkg-title">Health Checkup Package</h4>
+              <p class="rx-pkg-desc" id="rx-suggested-pkg-desc">Includes tests from your prescription.</p>
+              <div class="rx-pkg-pricing">
+                <span class="rx-pkg-price" id="rx-suggested-pkg-price">₹0</span>
+                <span class="rx-pkg-savings" id="rx-suggested-pkg-savings">Save ₹0</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="btn-use-suggested-package">
+              Choose Package Instead
+            </button>
+          </div>
+
+          <!-- Matched Tests Checkbox List -->
+          <div class="rx-matched-list" id="rx-matched-tests-list"></div>
+
+          <div class="rx-results-action-strip">
+            <button type="button" class="btn btn-primary btn-block btn-lg" id="btn-add-rx-tests-cart">
+              Add Selected Tests to Cart
+            </button>
+            <a href="tests.html" class="btn-link-manual" id="btn-manual-add-tests">
+              + Browse &amp; Add Tests Manually
+            </a>
+          </div>
+        </div>
+
+        <!-- State 4: Success State -->
+        <div class="rx-flow-pane hidden" id="rx-success-state">
+          <div class="rx-success-box">
+            <div class="rx-success-bubble">✓</div>
+            <h3 class="rx-success-title">Added to Cart!</h3>
+            <p class="rx-success-sub" id="rx-success-msg">Your prescribed blood tests have been successfully added to your cart.</p>
+            <div class="rx-success-items-list" id="rx-success-items-summary"></div>
+            <div class="rx-success-actions">
+              <a href="checkout.html" class="btn btn-primary btn-block btn-lg">
+                View Cart &amp; Checkout &rsaquo;
+              </a>
+              <button type="button" class="btn btn-secondary btn-block" id="btn-continue-browsing-rx">
+                Continue Browsing
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Location Picker Modal -->
+  <div class="modal-backdrop hidden" id="location-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Your City</h3>
+        <button type="button" class="modal-close" id="btn-close-location-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="location-search-box">
+          <input type="text" id="city-search-input" class="form-control" placeholder="Search city name...">
+        </div>
+        <div class="popular-cities-grid">
+          <button type="button" class="city-btn active" data-city="Chennai"><span class="city-name">Chennai</span></button>
+          <button type="button" class="city-btn" data-city="Coimbatore"><span class="city-name">Coimbatore</span></button>
+          <button type="button" class="city-btn" data-city="Madurai"><span class="city-name">Madurai</span></button>
+          <button type="button" class="city-btn" data-city="Bengaluru"><span class="city-name">Bengaluru</span></button>
+          <button type="button" class="city-btn" data-city="Hyderabad"><span class="city-name">Hyderabad</span></button>
+          <button type="button" class="city-btn" data-city="Kochi"><span class="city-name">Kochi</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Search Filter Modal -->
+  <div class="modal-backdrop hidden" id="filter-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Filter Tests &amp; Packages</h3>
+        <button type="button" class="modal-close" id="btn-close-filter-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="filter-group">
+          <label class="filter-label">Category</label>
+          <select id="filter-category-select" class="form-control">
+            <option value="all">All Categories</option>
+            <option value="packages">Health Packages Only</option>
+            <option value="diabetes">Diabetes &amp; Blood Sugar</option>
+            <option value="thyroid">Thyroid Profile</option>
+            <option value="lipid">Lipid &amp; Cholesterol</option>
+            <option value="liver">Liver Function (LFT)</option>
+            <option value="kidney">Kidney Function (KFT)</option>
+            <option value="vitamins">Vitamins &amp; Minerals</option>
+            <option value="hematology">Hematology &amp; CBC</option>
+            <option value="fever">Fever &amp; Infections</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Fasting Required?</label>
+          <select id="filter-fasting-select" class="form-control">
+            <option value="all">Any</option>
+            <option value="yes">Fasting Required (8-12 hrs)</option>
+            <option value="no">No Fasting Required</option>
+          </select>
+        </div>
+
+        <div class="filter-actions-row">
+          <button type="button" class="btn btn-secondary" id="btn-reset-filters">Reset</button>
+          <button type="button" class="btn btn-primary" id="btn-apply-filters">Apply Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Corporate Health Enquiry Modal -->
+  <div class="modal-backdrop hidden" id="corporate-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Corporate Health Enquiry</h3>
+        <button type="button" class="modal-close" id="btn-close-corporate-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="corporate-enquiry-form">
+          <div class="form-group">
+            <label for="corp-company" class="input-label">Company / Organization *</label>
+            <input type="text" id="corp-company" class="form-control" placeholder="e.g. Acme Tech Solutions" required>
+          </div>
+          <div class="form-group">
+            <label for="corp-name" class="input-label">Contact Person Name *</label>
+            <input type="text" id="corp-name" class="form-control" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="corp-contact" class="input-label">Work Mobile / Email *</label>
+            <input type="text" id="corp-contact" class="form-control" placeholder="contact@company.com or 10-digit mobile" required>
+          </div>
+          <div class="form-group">
+            <label for="corp-count" class="input-label">Estimated Employee Count</label>
+            <select id="corp-count" class="form-control">
+              <option value="10-50">10 - 50 Employees</option>
+              <option value="51-200">51 - 200 Employees</option>
+              <option value="200+">200+ Employees</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">
+            Submit Corporate Request
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Notifications Modal -->
+  <div class="modal-backdrop hidden" id="notifications-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Notifications</h3>
+        <button type="button" class="modal-close" id="btn-close-notif-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="notif-item" data-notif-id="notif_discount_10">
+          <span class="notif-dot green"></span>
+          <div class="notif-text">
+            <strong>10% Online Payment Discount Active</strong>
+            <p>Pay online using UPI or Cards to get 10% instant discount.</p>
+          </div>
+        </div>
+        <div class="notif-item" data-notif-id="notif_slot_confirmed">
+          <span class="notif-dot blue"></span>
+          <div class="notif-text">
+            <strong>Home Collection Slot Confirmed</strong>
+            <p>Phlebotomist will arrive on schedule for doorstep sample collection.</p>
+          </div>
+        </div>
+        <div class="notif-item" data-notif-id="notif_reports_ready">
+          <span class="notif-dot pink"></span>
+          <div class="notif-text">
+            <strong>Master Health Checkup Reports Ready</strong>
+            <p>Your digital report is generated. Download PDF in My Reports.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Banner -->
+  <div class="toast-banner hidden" id="customer-toast" role="status" aria-live="polite">
+    <span id="toast-message">Message</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/customer.js"></script>
+</body>
+</html>

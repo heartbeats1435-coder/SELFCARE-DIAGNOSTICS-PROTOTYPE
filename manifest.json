@@ -1,0 +1,107 @@
+{
+  "name": "Selfcare Diagnostics",
+  "short_name": "Selfcare",
+  "description": "Book laboratory blood tests, health checkup packages, and home sample collection in Chennai & Tiruvannamalai.",
+  "start_url": "customer.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0a58ca",
+  "lang": "en-IN",
+  "categories": [
+    "medical",
+    "health",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "assets/images/logo.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/images/logo.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Customer Portal",
+      "short_name": "Home",
+      "description": "Book tests, packages, and manage diagnostics",
+      "url": "customer.html",
+      "icons": [
+        {
+          "src": "assets/images/logo.png",
+          "type": "image/png",
+          "sizes": "96x96",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Diagnostic Blood Tests",
+      "short_name": "Tests",
+      "description": "Browse individual laboratory blood tests",
+      "url": "tests.html",
+      "icons": [
+        {
+          "src": "assets/images/logo.png",
+          "type": "image/png",
+          "sizes": "96x96",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Health Packages",
+      "short_name": "Packages",
+      "description": "Preventive full body checkups and camp packages",
+      "url": "packages.html",
+      "icons": [
+        {
+          "src": "assets/images/logo.png",
+          "type": "image/png",
+          "sizes": "96x96",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Lab Test Reports",
+      "short_name": "Reports",
+      "description": "View and download verified patient diagnostic reports",
+      "url": "reports.html",
+      "icons": [
+        {
+          "src": "assets/images/logo.png",
+          "type": "image/png",
+          "sizes": "96x96",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Book Sample Collection",
+      "short_name": "Book Slot",
+      "description": "Schedule phlebotomist visit or lab appointment",
+      "url": "checkout.html",
+      "icons": [
+        {
+          "src": "assets/images/logo.png",
+          "type": "image/png",
+          "sizes": "96x96",
+          "purpose": "any"
+        }
+      ]
+    }
+  ]
+}

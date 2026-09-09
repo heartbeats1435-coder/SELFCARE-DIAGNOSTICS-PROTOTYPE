@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="description" content="Explore Full Body Checkups and Health Checkup Packages at Selfcare Diagnostics. Free home sample collection and fast verified reports.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare">
+
+  <title>Health Checkup Packages | Selfcare Diagnostics</title>
+
+  <!-- Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/packages.css">
+</head>
+<body class="packages-body">
+
+  <!-- App Header Sticky Strip (Customer Dashboard Layout) -->
+  <header class="app-header header-sticky">
+    <div class="header-main-row">
+      <!-- Left: Drawer Toggle & Brand Logo -->
+      <div class="header-left">
+        <button type="button" class="icon-nav-btn" id="btn-toggle-drawer" aria-label="Open Menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="16" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <a href="customer.html" class="header-logo-link">
+          <img src="assets/images/logo.png" alt="Selfcare Diagnostics" class="header-logo-img">
+        </a>
+      </div>
+
+      <!-- Right: Location Pill, Notification Bell, User Avatar -->
+      <div class="header-right">
+        <!-- Location Pill -->
+        <button type="button" class="location-pill-btn" id="btn-select-location" aria-label="Select City">
+          <div class="loc-pin-col">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="loc-text-col">
+            <span class="loc-city-title">
+              <span id="current-location-text">Chennai</span>
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+            <span class="loc-badge-sub"><span class="pulse-dot"></span> Home Collection</span>
+          </div>
+        </button>
+
+        <!-- Notifications Bell -->
+        <button type="button" class="icon-nav-btn notif-btn" id="btn-notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="notif-badge hidden" id="notification-badge-count">0</span>
+        </button>
+
+        <!-- User Avatar -->
+        <a href="profile.html" class="user-avatar-pill" id="header-avatar-link" aria-label="Go to Profile">
+          <span id="header-avatar-initials">SC</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Integrated Search Control Bar (Matching customer.html) -->
+    <div class="search-bar-wrapper">
+      <div class="search-input-pill" id="search-input-container">
+        <span class="search-lens-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input 
+          type="text" 
+          id="package-search-input" 
+          class="home-search-field search-input-field" 
+          placeholder="Search packages (e.g. Master, Diabetes, Women, Senior)..." 
+          autocomplete="off" 
+          spellcheck="false"
+        >
+        <button type="button" class="btn-clear-search hidden" id="btn-clear-package-search" aria-label="Clear Search">&times;</button>
+        <button type="button" class="btn-filter-trigger" id="btn-open-filter" aria-label="Search Filter" onclick="document.getElementById('sort-packages-select')?.focus();">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Horizontal Category Chips Filter -->
+    <nav class="category-filter-nav" aria-label="Package categories">
+      <div class="scrollable-filter-chips" id="package-category-chips">
+        <button type="button" class="filter-chip active" data-category="all">All Packages</button>
+        <button type="button" class="filter-chip" data-category="fullbody">Full Body Checkup</button>
+        <button type="button" class="filter-chip" data-category="men">Men's Health</button>
+        <button type="button" class="filter-chip" data-category="women">Women's Health</button>
+        <button type="button" class="filter-chip" data-category="senior">Senior Care</button>
+        <button type="button" class="filter-chip" data-category="condition">Condition Based</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Side Navigation Drawer -->
+  <div class="drawer-backdrop hidden" id="drawer-overlay"></div>
+  <aside class="side-drawer" id="nav-drawer" aria-hidden="true">
+    <div class="drawer-top-profile">
+      <div class="drawer-avatar" id="drawer-avatar-initials">SC</div>
+      <div class="drawer-user-meta">
+        <h3 class="drawer-name" id="drawer-user-name">Selfcare Patient</h3>
+        <p class="drawer-phone" id="drawer-user-phone">+91 7010174890</p>
+      </div>
+      <button type="button" class="btn-drawer-close" id="btn-close-drawer" aria-label="Close Drawer">&times;</button>
+    </div>
+
+    <nav class="drawer-nav-list">
+      <a href="customer.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home Dashboard</span>
+      </a>
+      <a href="tests.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/><path d="M7 14h10"/></svg>
+        <span>Book Lab Tests</span>
+      </a>
+      <a href="packages.html" class="drawer-nav-item active">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M12 10.5v6"/><path d="M9 13.5h6"/></svg>
+        <span>Health Packages</span>
+      </a>
+      <a href="reports.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/></svg>
+        <span>My Test Reports</span>
+      </a>
+      <a href="checkout.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span>My Cart</span>
+      </a>
+      <a href="profile.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile &amp; Family Members</span>
+      </a>
+      <a href="ai-assistant.html" class="drawer-nav-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <span>AI Health Explainer</span>
+      </a>
+
+      <div class="drawer-separator"></div>
+
+      <button type="button" class="drawer-nav-item drawer-logout-btn" id="btn-drawer-logout">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Sign Out</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Scrollable Content Container -->
+  <main class="main-content">
+
+    <!-- Value Proposition Banner Strip -->
+    <section class="banner-strip">
+      <div class="banner-item">
+        <span class="banner-icon">🏠</span>
+        <span>Free Home Sample Collection</span>
+      </div>
+      <div class="banner-item">
+        <span class="banner-icon">⚡</span>
+        <span>Same Day Verified Reports</span>
+      </div>
+      <div class="banner-item">
+        <span class="banner-icon">🛡️</span>
+        <span>100% Diagnostic Accuracy</span>
+      </div>
+    </section>
+
+    <!-- Active Filters & Sort Strip -->
+    <div class="filter-toolbar">
+      <span class="results-found-text" id="pkg-results-count">Loading health packages...</span>
+      <div class="sort-dropdown-wrapper">
+        <label for="sort-packages-select" class="sort-label">Sort:</label>
+        <select id="sort-packages-select" class="sort-select">
+          <option value="popularity" selected>Most Popular</option>
+          <option value="price_low">Price: Low to High</option>
+          <option value="price_high">Price: High to Low</option>
+          <option value="tests_desc">Most Tests Included</option>
+          <option value="name_asc">Name: A to Z</option>
+          <option value="name_desc">Name: Z to A</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Dynamic Packages List / Grid Container -->
+    <section class="packages-list-section" id="packages-container">
+      <div class="package-card skeleton-card">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line subtitle"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+      <div class="package-card skeleton-card">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line subtitle"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    </section>
+
+    <!-- Empty Results Fallback -->
+    <div class="empty-state hidden" id="packages-empty-state">
+      <div class="empty-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      </div>
+      <h3 class="empty-title">No packages found</h3>
+      <p class="empty-subtitle">Try adjusting your search keywords or switching category filters.</p>
+      <button type="button" class="btn btn-outline-primary btn-sm" id="btn-reset-pkg-filters">Reset Filters</button>
+    </div>
+
+    <!-- Error State Fallback -->
+    <div class="error-state hidden" id="packages-error-state">
+      <div class="error-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h3 class="error-title">Unable to load packages</h3>
+      <p class="error-subtitle">We could not load the health packages catalog. Please check your network connection and try again.</p>
+      <button type="button" class="btn btn-retry" id="btn-retry-packages">Try Again</button>
+    </div>
+
+  </main>
+
+  <!-- Package Detailed Information Modal Sheet -->
+  <div class="modal-backdrop hidden" id="package-detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-pkg-name">
+    <div class="modal-card modal-card-sheet">
+      <div class="modal-header">
+        <div class="package-detail-header-info">
+          <span class="package-category-badge" id="modal-pkg-category">FULL BODY CHECKUP</span>
+          <h2 class="modal-title" id="modal-pkg-name">Package Details</h2>
+          <p class="test-code-text" id="modal-pkg-code">Package ID: -</p>
+        </div>
+        <button type="button" class="modal-close" id="btn-close-package-modal" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body scrollable-modal-body">
+        <div class="detail-price-card">
+          <div class="detail-price-main">
+            <span class="detail-offer-price" id="modal-pkg-offer">₹0</span>
+            <span class="detail-mrp-price" id="modal-pkg-mrp">₹0</span>
+            <span class="detail-savings-badge" id="modal-pkg-savings">SAVE 0%</span>
+          </div>
+          <div class="detail-badge-container" id="modal-pkg-badge-container">
+            <span class="bestseller-pill">🔥 MOST POPULAR</span>
+          </div>
+        </div>
+
+        <div class="test-meta-grid">
+          <div class="meta-item">
+            <span class="meta-icon">🧪</span>
+            <div class="meta-text">
+              <span class="meta-label">Parameters Covered</span>
+              <span class="meta-value" id="modal-pkg-test-count">-</span>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <span class="meta-icon">📊</span>
+            <div class="meta-text">
+              <span class="meta-label">Health Profiles</span>
+              <span class="meta-value" id="modal-pkg-profiles-count">-</span>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <span class="meta-icon">🍽️</span>
+            <div class="meta-text">
+              <span class="meta-label">Fasting Required</span>
+              <span class="meta-value" id="modal-pkg-fasting">-</span>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <span class="meta-icon">⏱️</span>
+            <div class="meta-text">
+              <span class="meta-label">Report Turnaround</span>
+              <span class="meta-value" id="modal-pkg-tat">Within 12 Hours</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section-block">
+          <h3 class="detail-section-title">Package Overview</h3>
+          <p class="detail-description-text" id="modal-pkg-description">-</p>
+        </div>
+
+        <div class="detail-section-block">
+          <div class="section-title-row">
+            <h3 class="detail-section-title">Included Health Profiles</h3>
+            <span class="param-count-badge" id="modal-pkg-profiles-badge">Included</span>
+          </div>
+          <div class="package-profiles-accordion" id="modal-pkg-profiles-list"></div>
+        </div>
+
+        <div class="detail-section-block bg-light-card">
+          <h3 class="detail-section-title">Sample Collection Instructions</h3>
+          <ul class="guidelines-list">
+            <li><strong>Fasting:</strong> Do not consume food or drink (except plain water) for 10-12 hours prior to sample collection.</li>
+            <li><strong>Medication:</strong> Take morning medications only after blood sample draw unless instructed otherwise by your physician.</li>
+            <li><strong>Safety:</strong> Our certified phlebotomist will arrive equipped with sealed sterile single-use vacuum tube kits.</li>
+          </ul>
+        </div>
+
+        <div class="accreditation-banner">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          <div class="accreditation-text">
+            <strong>NABL &amp; ISO Certified Diagnostic Laboratories</strong>
+            <span>Verified by MD Pathologists with Dual-Doctor Certification.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer footer-sticky-actions">
+        <button type="button" class="btn btn-outline-primary btn-lg flex-1" id="btn-pkg-modal-add-cart">Add to Cart</button>
+        <button type="button" class="btn btn-primary btn-lg flex-1" id="btn-pkg-modal-buy-now">Book Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications Modal -->
+  <div class="modal-backdrop hidden" id="notifications-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Notifications</h3>
+        <button type="button" class="modal-close" id="btn-close-notif-modal" aria-label="Close notifications">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="notif-item" data-notif-id="notif_discount_10">
+          <span class="notif-dot green"></span>
+          <div class="notif-text">
+            <strong>10% Online Payment Discount Active</strong>
+            <p>Pay online using UPI or Cards to get 10% instant discount.</p>
+          </div>
+        </div>
+        <div class="notif-item" data-notif-id="notif_slot_confirmed">
+          <span class="notif-dot blue"></span>
+          <div class="notif-text">
+            <strong>Home Collection Slot Confirmed</strong>
+            <p>Phlebotomist will arrive on schedule for doorstep sample collection.</p>
+          </div>
+        </div>
+        <div class="notif-item" data-notif-id="notif_reports_ready">
+          <span class="notif-dot pink"></span>
+          <div class="notif-text">
+            <strong>Master Health Checkup Reports Ready</strong>
+            <p>Your digital report is generated. Download PDF in My Reports.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- City Selection Picker Modal -->
+  <div class="modal-backdrop hidden" id="location-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Your City</h3>
+        <button type="button" class="modal-close" id="btn-close-location-modal" aria-label="Close location picker">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="location-search-box">
+          <input type="text" id="city-search-input" class="form-control" placeholder="Search city name...">
+        </div>
+        <div class="popular-cities-grid">
+          <button type="button" class="city-btn active" data-city="Chennai">
+            <span class="city-name">Chennai</span>
+          </button>
+          <button type="button" class="city-btn" data-city="Coimbatore">
+            <span class="city-name">Coimbatore</span>
+          </button>
+          <button type="button" class="city-btn" data-city="Madurai">
+            <span class="city-name">Madurai</span>
+          </button>
+          <button type="button" class="city-btn" data-city="Bengaluru">
+            <span class="city-name">Bengaluru</span>
+          </button>
+          <button type="button" class="city-btn" data-city="Hyderabad">
+            <span class="city-name">Hyderabad</span>
+          </button>
+          <button type="button" class="city-btn" data-city="Kochi">
+            <span class="city-name">Kochi</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Banner -->
+  <div class="toast-banner hidden" id="packages-toast" role="status" aria-live="polite">
+    <span id="toast-message">Item added to cart</span>
+  </div>
+
+  <!-- Fixed Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="customer.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <span class="nav-label">Home</span>
+    </a>
+
+    <a href="tests.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6"/>
+          <path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/>
+          <path d="M7 14h10"/>
+        </svg>
+      </div>
+      <span class="nav-label">Tests</span>
+    </a>
+
+    <a href="packages.html" class="nav-link active">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          <rect x="3" y="7" width="18" height="13" rx="3"/>
+          <path d="M12 10.5v6"/>
+          <path d="M9 13.5h6"/>
+        </svg>
+      </div>
+      <span class="nav-label">Packages</span>
+    </a>
+
+    <a href="reports.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/>
+        </svg>
+      </div>
+      <span class="nav-label">Reports</span>
+    </a>
+
+    <a href="checkout.html" class="nav-link">
+      <div class="nav-icon-wrapper position-relative" id="bottom-cart-nav-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="nav-cart-count hidden" id="bottom-cart-badge">0</span>
+      </div>
+      <span class="nav-label">Cart</span>
+    </a>
+
+    <a href="profile.html" class="nav-link">
+      <div class="nav-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <span class="nav-label">Profile</span>
+    </a>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/packages.js"></script>
+</body>
+</html>

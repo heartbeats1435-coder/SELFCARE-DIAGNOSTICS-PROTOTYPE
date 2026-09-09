@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="description" content="Selfcare Diagnostics Field Phlebotomist Portal - Doorstep Sample Collections & Cold Chain Management.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare Tech">
+
+  <title>Phlebotomist Field Portal | Selfcare Diagnostics</title>
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23009963'/><path d='M30 50h12l5-15 10 30 7-20 6 5h10' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/technician.css">
+</head>
+<body class="technician-body">
+
+  <!-- Offline Status Banner -->
+  <div class="offline-banner hidden" id="tech-offline-banner" role="alert">
+    <span>🟠 Offline Mode — Changes queued locally &amp; will sync automatically</span>
+  </div>
+
+  <!-- Sticky Top Header -->
+  <header class="tech-header">
+    <div class="tech-header-top">
+      <!-- Clickable Profile Cluster -->
+      <div class="tech-profile-cluster" id="tech-profile-trigger" role="button" tabindex="0" aria-label="View Technician Profile and Switch Account" title="Click to view technician profile">
+        <div class="tech-avatar" id="tech-avatar-bubble">RM</div>
+        <div class="tech-info">
+          <div class="tech-name-row">
+            <span class="tech-name" id="tech-name-display">Ravi M.</span>
+            <span class="duty-badge on-duty" id="tech-duty-status">On Duty</span>
+          </div>
+          <span class="tech-role" id="tech-route-subtitle">Phlebotomist • Chennai Hub</span>
+        </div>
+      </div>
+
+      <div class="tech-header-actions">
+        <div class="sync-status-badge online" id="sync-status">
+          <span class="pulse-dot"></span>
+          <span class="sync-text" id="sync-status-text">Live Sync</span>
+        </div>
+        <button type="button" class="icon-touch-btn" id="btn-refresh-tasks" aria-label="Refresh Task List" title="Refresh">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Route & Branch Selector -->
+    <div class="tech-route-strip">
+      <div class="route-select-wrapper">
+        <span class="route-icon" aria-hidden="true">🛵</span>
+        <select id="tech-route-select" class="route-dropdown" aria-label="Filter Route by Branch">
+          <option value="ALL" selected>All Assigned Locations (Chennai &amp; TVM)</option>
+          <option value="Chennai">Chennai Hub Routes (Indiranagar / ECR)</option>
+          <option value="Tiruvannamalai">Tiruvannamalai Routes</option>
+        </select>
+      </div>
+      <button type="button" class="btn-touch-map" id="btn-map-all" aria-label="Open Map Navigation for Active Tasks">🗺️ Route Map</button>
+    </div>
+  </header>
+
+  <!-- Main Field Content Container -->
+  <main class="tech-main-container">
+
+    <!-- KPI Progress Tracker -->
+    <section class="tech-kpi-tracker" aria-label="Technician Task Overview">
+      <div class="kpi-box">
+        <span class="kpi-num" id="kpi-tech-total">0</span>
+        <span class="kpi-label">Today</span>
+      </div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-box">
+        <span class="kpi-num text-warning" id="kpi-tech-pending">0</span>
+        <span class="kpi-label">Pending</span>
+      </div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-box">
+        <span class="kpi-num text-info" id="kpi-tech-transit">0</span>
+        <span class="kpi-label">In Transit</span>
+      </div>
+      <div class="kpi-divider"></div>
+      <div class="kpi-box">
+        <span class="kpi-num text-success" id="kpi-tech-collected">0</span>
+        <span class="kpi-label">Collected</span>
+      </div>
+    </section>
+
+    <!-- Filter Pills Bar -->
+    <nav class="task-filter-pills" aria-label="Task Status Filters">
+      <button type="button" class="filter-pill active" data-filter="ALL">All (<span id="count-pill-all">0</span>)</button>
+      <button type="button" class="filter-pill" data-filter="PENDING">Pending (<span id="count-pill-pending">0</span>)</button>
+      <button type="button" class="filter-pill" data-filter="TRANSIT">In Transit (<span id="count-pill-transit">0</span>)</button>
+      <button type="button" class="filter-pill" data-filter="COLLECTED">Collected (<span id="count-pill-collected">0</span>)</button>
+      <button type="button" class="filter-pill" data-filter="ISSUES">Alerts / Issues (<span id="count-pill-issues">0</span>)</button>
+    </nav>
+
+    <!-- Live Dynamic Task Cards List -->
+    <section class="task-cards-list" id="tech-tasks-list" aria-live="polite">
+      <div class="loading-spinner">Querying assigned doorstep collections...</div>
+    </section>
+
+    <!-- Floating Batch Handover Card -->
+    <aside class="lab-handover-strip" id="lab-handover-box" style="display:none;" aria-label="Lab Handover Summary">
+      <div class="handover-info">
+        <strong class="handover-title" id="handover-sample-count">0 Samples In Carrier Bag</strong>
+        <span class="handover-sub">Specimens ready for central lab deposition</span>
+      </div>
+      <button type="button" class="btn btn-primary btn-3d btn-sm" id="btn-deposit-lab">
+        🏥 Deposit at Lab
+      </button>
+    </aside>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: TECHNICIAN PROFILE & ACCOUNT DETAILS (BOTTOM SHEET) -->
+  <!-- ========================================================================= -->
+  <div class="admin-modal-backdrop hidden" id="tech-profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-heading">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="profile-modal-heading">Phlebotomist Profile</h2>
+          <p class="modal-subtitle">Field technician details &amp; active status</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-profile-modal" aria-label="Close Profile Details">&times;</button>
+      </div>
+
+      <div class="modal-body-form">
+        <!-- Hero Card -->
+        <div class="profile-hero-card">
+          <div class="tech-avatar" id="prof-modal-avatar">RM</div>
+          <div class="profile-hero-info">
+            <div class="profile-hero-name-row">
+              <strong id="prof-modal-name">Ravi M.</strong>
+              <span class="duty-badge on-duty" id="prof-modal-duty-badge">On Duty</span>
+            </div>
+            <span class="profile-hero-id" id="prof-modal-id">ID: TECH-101</span>
+            <span class="profile-hero-branch" id="prof-modal-branch">Hub: Chennai (Indiranagar / ECR)</span>
+          </div>
+        </div>
+
+        <!-- Switch Active Technician Profile -->
+        <div class="form-field">
+          <label for="prof-switch-select">Switch Active Phlebotomist</label>
+          <select id="prof-switch-select" class="form-input">
+            <!-- Populated dynamically -->
+          </select>
+          <small class="field-hint">Switch account to manage bookings assigned specifically to that technician.</small>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="profile-info-grid">
+          <div class="profile-info-row">
+            <span>Contact Phone:</span>
+            <strong id="prof-modal-phone">+91 9876543210</strong>
+          </div>
+          <div class="profile-info-row">
+            <span>Email Address:</span>
+            <strong id="prof-modal-email">ravi@selfcare.com</strong>
+          </div>
+          <div class="profile-info-row">
+            <span>Assigned Branch:</span>
+            <strong id="prof-modal-branch-name">Chennai Central Hub</strong>
+          </div>
+          <div class="profile-info-row">
+            <span>Active Tasks:</span>
+            <strong id="prof-modal-active-tasks" class="text-success">0 Pending</strong>
+          </div>
+          <div class="profile-info-row">
+            <span>Current GPS:</span>
+            <strong id="prof-modal-gps">12.9249, 80.2520</strong>
+          </div>
+        </div>
+
+        <!-- Duty Status & GPS Actions -->
+        <div class="profile-actions-row">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-toggle-my-duty">
+            <span id="duty-toggle-label">Toggle Duty Status</span>
+          </button>
+          <button type="button" class="btn btn-outline-primary btn-sm" id="btn-update-my-gps">
+            📍 Update My GPS
+          </button>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary w-100" id="btn-close-profile-sheet">Close Profile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: SAMPLE COLLECTION & CLINICAL SPECIMEN VERIFICATION -->
+  <!-- ========================================================================= -->
+  <div class="admin-modal-backdrop hidden" id="collect-sample-modal" role="dialog" aria-modal="true" aria-labelledby="collect-modal-heading">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="collect-modal-heading">Record Specimen Collection</h2>
+          <p class="modal-subtitle" id="collect-modal-meta">Patient: Loading...</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-collect-modal" aria-label="Close Collection Sheet">&times;</button>
+      </div>
+
+      <form id="form-collect-sample" class="modal-body-form" novalidate>
+        <input type="hidden" id="collect-booking-id">
+
+        <!-- SECTION 1: PATIENT IDENTITY VERIFICATION -->
+        <div class="workflow-card patient-verify-card">
+          <div class="workflow-card-header">
+            <span class="workflow-card-tag">STEP 1</span>
+            <strong>Patient Identity Verification</strong>
+          </div>
+          <div class="patient-verify-details">
+            <div class="pv-row"><span>Patient:</span> <strong id="pv-patient-name">--</strong></div>
+            <div class="pv-row"><span>Booking ID:</span> <strong id="pv-booking-id">--</strong></div>
+            <div class="pv-row"><span>Demographics:</span> <strong id="pv-patient-demographics">--</strong></div>
+            <div class="pv-row"><span>Mobile:</span> <strong id="pv-patient-phone">--</strong></div>
+          </div>
+          <label class="verification-checkbox-label">
+            <input type="checkbox" id="chk-patient-verified" required>
+            <span>I verified patient identity, fasting status &amp; booking details</span>
+          </label>
+        </div>
+
+        <!-- SECTION 2: BARCODE ENTRY (NO CAMERA SCANNER) -->
+        <div class="workflow-card barcode-entry-card">
+          <div class="workflow-card-header">
+            <span class="workflow-card-tag">STEP 2</span>
+            <strong>Specimen Primary Barcode</strong>
+          </div>
+          <div class="form-field">
+            <label for="manual-barcode-input">Scan / Enter Tube Barcode *</label>
+            <div class="input-action-cluster">
+              <input type="text" id="manual-barcode-input" class="form-input barcode-input" placeholder="e.g. SCD-889102" required autocomplete="off" spellcheck="false" maxlength="24">
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-gen-barcode" title="Auto-generate a guaranteed unique barcode">🎲 Auto Gen</button>
+            </div>
+            <small class="field-hint">Paste printed barcode or generate a unique tracking ID.</small>
+          </div>
+        </div>
+
+        <!-- SECTION 3: INTELLIGENT TUBE REQUIREMENT & VERIFICATION -->
+        <div class="workflow-card tubes-workflow-card">
+          <div class="workflow-card-header">
+            <span class="workflow-card-tag">STEP 3</span>
+            <strong>Prescribed Tests &amp; Required Specimen Tubes</strong>
+          </div>
+
+          <div class="booked-tests-summary">
+            <span class="summary-label">Booked Tests:</span>
+            <div id="collect-tests-list" class="booked-tests-text">--</div>
+          </div>
+
+          <div class="required-tubes-box">
+            <span class="required-tubes-heading">REQUIRED TUBES (CLINICALLY DETERMINED)</span>
+            <div id="required-tubes-container" class="required-tubes-list">
+              <!-- Dynamically built based on tests -->
+            </div>
+          </div>
+
+          <label class="verification-checkbox-label" style="margin-top: 10px;">
+            <input type="checkbox" id="chk-tubes-verified" required>
+            <span>✓ I verified all required tubes are collected and labeled</span>
+          </label>
+
+          <!-- Additional / Optional Specimen Types -->
+          <details class="extra-tubes-dropdown">
+            <summary>+ Add Optional / Additional Tubes</summary>
+            <div class="extra-tubes-options">
+              <label class="tube-checkbox-card">
+                <input type="checkbox" name="extra_tube" value="Sodium Citrate (Light Blue)">
+                <span class="tube-dot tube-blue" aria-hidden="true"></span>
+                <span><strong>Sodium Citrate (Light Blue):</strong> PT / INR / Coagulation</span>
+              </label>
+              <label class="tube-checkbox-card">
+                <input type="checkbox" name="extra_tube" value="Plain Tube (Red)">
+                <span class="tube-dot tube-red" aria-hidden="true"></span>
+                <span><strong>Plain Serum (Red):</strong> Drug Levels / Serology</span>
+              </label>
+              <label class="tube-checkbox-card">
+                <input type="checkbox" name="extra_tube" value="Sterile Urine Container">
+                <span class="tube-dot tube-urine" aria-hidden="true"></span>
+                <span><strong>Sterile Container:</strong> Urine Routine / Culture</span>
+              </label>
+            </div>
+          </details>
+        </div>
+
+        <!-- SECTION 4: PAYMENT VERIFICATION -->
+        <div class="workflow-card payment-workflow-card" id="payment-status-panel">
+          <div class="workflow-card-header">
+            <span class="workflow-card-tag">STEP 4</span>
+            <strong>Payment Status</strong>
+          </div>
+          <div class="payment-verify-row">
+            <span class="font-bold" id="collect-payment-state">Checking...</span>
+            <span class="text-muted font-bold" id="collect-due-state">₹0.00 Due</span>
+          </div>
+          <!-- Cash/UPI Collection Confirmation Checkbox -->
+          <div id="collect-cash-confirm-row" class="cash-confirm-box hidden">
+            <label class="verification-checkbox-label">
+              <input type="checkbox" id="chk-cash-collected" name="cash_collected">
+              <span>I confirm payment of <strong id="collect-cash-amount">₹0</strong> received in Cash / UPI</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- SECTION 5: OPTIONAL PHOTO EVIDENCE & REMARKS -->
+        <div class="workflow-card optional-evidence-card">
+          <div class="workflow-card-header">
+            <span class="workflow-card-tag">STEP 5</span>
+            <strong>Optional Photo &amp; Remarks</strong>
+          </div>
+
+          <div class="photo-capture-wrapper">
+            <input type="file" id="sample-photo-input" accept="image/*" capture="environment" class="hidden-file-input">
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-capture-photo">
+              📷 Attach / Take Sample Photo (Optional)
+            </button>
+            <span id="photo-preview-name" class="photo-preview-label hidden">Photo Attached</span>
+            <div id="photo-preview-container" class="photo-preview-box hidden">
+              <img id="photo-preview-img" src="" alt="Sample specimen preview">
+              <button type="button" id="btn-remove-photo" class="btn-remove-preview" aria-label="Remove photo">&times;</button>
+            </div>
+          </div>
+
+          <div class="form-field mt-2">
+            <label for="collection-notes">Collection Notes / Remarks</label>
+            <input type="text" id="collection-notes" class="form-input" placeholder="e.g. Drawn from left median cubital vein; fasting confirmed.">
+          </div>
+        </div>
+
+        <!-- SUBMIT / CANCEL ACTIONS -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-collect">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-3d" id="btn-confirm-collect">
+            <span class="btn-text">Confirm &amp; Seal Sample</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: PROFESSIONAL DELAY ALERT (BOTTOM SHEET) -->
+  <!-- ========================================================================= -->
+  <div class="admin-modal-backdrop hidden" id="tech-delay-modal" role="dialog" aria-modal="true" aria-labelledby="delay-modal-heading">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="delay-modal-heading">Report Transit / Arrival Delay</h2>
+          <p class="modal-subtitle" id="delay-modal-meta">Booking #--</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-delay-modal" aria-label="Close Delay Sheet">&times;</button>
+      </div>
+
+      <form id="form-report-delay" class="modal-body-form">
+        <input type="hidden" id="delay-booking-id">
+
+        <div class="form-field">
+          <label for="delay-reason-select">Primary Delay Reason *</label>
+          <select id="delay-reason-select" class="form-input" required>
+            <option value="Traffic Congestion">Heavy Traffic / Road Congestion</option>
+            <option value="Patient Requested Delay">Patient Requested Postponement</option>
+            <option value="Patient Not Available">Patient Not Answering / Not Available</option>
+            <option value="Address Issue">Address / Gate Inaccessible or Wrong</option>
+            <option value="Vehicle Breakdown">Vehicle Breakdown / Puncture</option>
+            <option value="Previous Collection Delayed">Previous Home Visit Took Longer</option>
+            <option value="Weather / Rain">Heavy Rain / Adverse Weather</option>
+            <option value="Other">Other Specific Reason</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="delay-minutes-select">Expected Delay Duration *</label>
+          <select id="delay-minutes-select" class="form-input" required>
+            <option value="15" selected>15 Minutes</option>
+            <option value="30">30 Minutes</option>
+            <option value="45">45 Minutes</option>
+            <option value="60">1 Hour</option>
+            <option value="Other">Custom Duration</option>
+          </select>
+        </div>
+
+        <div class="form-field hidden" id="delay-custom-notes-field">
+          <label for="delay-custom-notes">Additional Details / Notes *</label>
+          <input type="text" id="delay-custom-notes" class="form-input" placeholder="Explain the specific situation...">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-delay">Cancel</button>
+          <button type="submit" class="btn btn-warning btn-3d" id="btn-confirm-delay">
+            <span class="btn-text">Broadcast Delay Alert</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: PATIENT UNAVAILABLE / RESCHEDULE (BOTTOM SHEET) -->
+  <!-- ========================================================================= -->
+  <div class="admin-modal-backdrop hidden" id="tech-unavailable-modal" role="dialog" aria-modal="true" aria-labelledby="unavailable-modal-heading">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="unavailable-modal-heading">Patient Unavailable / Inaccessible</h2>
+          <p class="modal-subtitle" id="unavailable-modal-meta">Booking #--</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-unavailable-modal" aria-label="Close Modal">&times;</button>
+      </div>
+
+      <form id="form-report-unavailable" class="modal-body-form">
+        <input type="hidden" id="unavailable-booking-id">
+
+        <div class="form-field">
+          <label for="unavailable-reason-select">Issue Encountered *</label>
+          <select id="unavailable-reason-select" class="form-input" required>
+            <option value="No response to doorbell/calls">No Response to Calls &amp; Doorbell</option>
+            <option value="Phone switched off">Phone Switched Off / Out of Coverage</option>
+            <option value="Patient not at address">Patient Not at Given Address</option>
+            <option value="Patient requested reschedule">Patient Requested Reschedule for Later</option>
+            <option value="Address incorrect / not found">Address Incorrect or Gate Inaccessible</option>
+            <option value="Other">Other Reason</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="unavailable-notes">Technician Field Notes</label>
+          <input type="text" id="unavailable-notes" class="form-input" placeholder="e.g. Waited 15 mins at door, called 3 times.">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-unavailable">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-3d" id="btn-confirm-unavailable">
+            <span class="btn-text">Mark Patient Unavailable</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 5: SAMPLE REJECTION WORKFLOW (BOTTOM SHEET) -->
+  <!-- ========================================================================= -->
+  <div class="admin-modal-backdrop hidden" id="tech-rejection-modal" role="dialog" aria-modal="true" aria-labelledby="rejection-modal-heading">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="rejection-modal-heading">Report Sample Rejection</h2>
+          <p class="modal-subtitle" id="rejection-modal-meta">Specimen Rejection &amp; Recollection Request</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-rejection-modal" aria-label="Close Rejection Sheet">&times;</button>
+      </div>
+
+      <form id="form-report-rejection" class="modal-body-form">
+        <input type="hidden" id="rejection-booking-id">
+
+        <div class="form-field">
+          <label for="rejection-reason-select">Clinical Rejection Reason *</label>
+          <select id="rejection-reason-select" class="form-input" required>
+            <option value="Insufficient Sample (QNS)">Insufficient Sample Volume (QNS)</option>
+            <option value="Hemolysed Sample">Hemolysed Sample</option>
+            <option value="Clotted Sample">Clotted Specimen (EDTA/Citrate)</option>
+            <option value="Wrong Tube / Additive">Wrong Tube Drawn / Incorrect Additive</option>
+            <option value="Barcode Problem / Unreadable">Barcode Damaged / Unreadable</option>
+            <option value="Leaking / Damaged Tube">Leaking / Cracked Specimen Tube</option>
+            <option value="Patient / Collection Difficulty">Vein Collapse / Incomplete Draw</option>
+            <option value="Other">Other Reason</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="rejection-notes">Rejection Details &amp; Pathologist Remarks *</label>
+          <input type="text" id="rejection-notes" class="form-input" placeholder="Describe the specimen defect..." required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-rejection">Cancel</button>
+          <button type="submit" class="btn btn-danger btn-3d" id="btn-confirm-rejection">
+            <span class="btn-text">Reject Specimen</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 6: LAB HUB DEPOSIT & COLD CHAIN HANDOVER -->
+  <!-- ========================================================================= -->
+  <div class="admin-modal-backdrop hidden" id="lab-deposit-modal" role="dialog" aria-modal="true" aria-labelledby="deposit-modal-heading">
+    <div class="mobile-bottom-sheet">
+      <div class="sheet-drag-handle" aria-hidden="true"></div>
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="deposit-modal-heading">Handover Samples to Lab Hub</h2>
+          <p class="modal-subtitle">Transfer collected specimen batch into central laboratory</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-deposit-modal" aria-label="Close Deposit Sheet">&times;</button>
+      </div>
+
+      <form id="form-deposit-lab" class="modal-body-form">
+        <!-- Handover Summary Box -->
+        <div class="handover-summary-card">
+          <div class="hs-row">
+            <span>Total Samples in Bag:</span>
+            <strong id="deposit-batch-count">0</strong>
+          </div>
+          <div class="hs-row">
+            <span>Phlebotomist:</span>
+            <strong id="deposit-tech-name">Ravi M.</strong>
+          </div>
+          <div class="hs-row">
+            <span>Hub Branch:</span>
+            <strong id="deposit-branch-name">Chennai Central Hub</strong>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="select-lab-receiver">Receiving Medical Lab Staff *</label>
+          <select id="select-lab-receiver" class="form-input" required>
+            <option value="Dr. S. Mehta (Pathologist)" selected>Dr. S. Mehta (Pathologist)</option>
+            <option value="Kavitha R. (Senior Medical Tech)">Kavitha R. (Senior Medical Tech)</option>
+            <option value="Suresh M. (Receiving Desk)">Suresh M. (Receiving Desk)</option>
+            <option value="Dr. Ananya V. (Biochemist)">Dr. Ananya V. (Biochemist)</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="cold-chain-temp">Cold Carrier Box Temperature (°C) *</label>
+          <input type="number" step="0.1" id="cold-chain-temp" class="form-input font-bold" value="4.2" required>
+          <small class="field-hint">Standard specimen integrity range: 2.0°C to 8.0°C</small>
+        </div>
+
+        <!-- Warning for Out of Range Temperature -->
+        <div id="cold-chain-warning" class="warning-alert-box hidden">
+          <strong>⚠️ Temperature Out of Standard Range (2°C - 8°C)!</strong>
+          <p>Specimens may risk hemolysis or enzymatic alteration.</p>
+          <label class="verification-checkbox-label" style="margin-top:6px;">
+            <input type="checkbox" id="chk-temp-override">
+            <span>I confirm handover of specimens with temperature flag</span>
+          </label>
+        </div>
+
+        <!-- Sample List Breakdown -->
+        <div class="form-field">
+          <label>Specimens in this Batch</label>
+          <div id="handover-samples-list" class="handover-samples-scrollbox">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" id="btn-cancel-deposit">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-3d" id="btn-confirm-deposit">
+            <span class="btn-text">Complete Lab Handover</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom App Dock (Clean Field Nav) -->
+  <nav class="mobile-bottom-dock" aria-label="Technician Bottom Navigation">
+    <button type="button" class="dock-item active" id="nav-btn-tasks" aria-label="View Tasks">
+      <span class="dock-icon" aria-hidden="true">🛵</span>
+      <span class="dock-label">My Tasks</span>
+    </button>
+    <button type="button" class="dock-item" id="nav-btn-quick-collect" aria-label="Quick Draw Sample">
+      <span class="dock-icon" aria-hidden="true">🩸</span>
+      <span class="dock-label">Quick Collect</span>
+    </button>
+    <button type="button" class="dock-item" id="nav-btn-tech-profile" aria-label="View Phlebotomist Profile">
+      <span class="dock-icon" aria-hidden="true">👤</span>
+      <span class="dock-label">My Profile</span>
+    </button>
+  </nav>
+
+  <!-- Live Toast Banner -->
+  <div class="toast-banner hidden" id="tech-toast" role="status" aria-live="polite">
+    <span id="toast-message">Message</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/technician.js"></script>
+</body>
+</html>

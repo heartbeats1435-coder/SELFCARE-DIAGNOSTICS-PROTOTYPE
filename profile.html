@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="description" content="Selfcare Diagnostics - Manage your patient profile, family member records, and saved addresses.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare Profile">
+
+  <title>My Profile | Selfcare Diagnostics</title>
+
+  <!-- Favicon & Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/customer.css">
+  <link rel="stylesheet" href="assets/css/profile.css">
+</head>
+<body class="customer-body profile-body">
+
+  <!-- Ambient Floating Background Blur Lights -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Main Mobile App Shell -->
+  <div class="customer-container">
+
+    <!-- Header Navigation Bar -->
+    <header class="customer-header">
+      <div class="header-main-row">
+        <!-- Left: Drawer Toggle & Brand Logo -->
+        <div class="header-left">
+          <button type="button" class="icon-nav-btn" id="btn-toggle-drawer" aria-label="Open Menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="16" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <a href="customer.html" class="header-logo-link">
+            <img src="assets/images/logo.png" alt="Selfcare Diagnostics" class="header-logo-img">
+          </a>
+        </div>
+
+        <!-- Right: Location Pill, Notification Bell, User Avatar -->
+        <div class="header-right">
+          <!-- Location Pill -->
+          <button type="button" class="location-pill-btn" id="btn-select-location" aria-label="Select City">
+            <div class="loc-pin-col">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div class="loc-text-col">
+              <span class="loc-city-title">
+                <span id="current-location-text">Chennai</span>
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+              <span class="loc-badge-sub"><span class="pulse-dot"></span> Home Collection</span>
+            </div>
+          </button>
+
+          <!-- Notifications Bell -->
+          <button type="button" class="icon-nav-btn notif-btn" id="btn-notifications" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="notif-badge hidden" id="notification-badge-count">0</span>
+          </button>
+
+          <!-- User Avatar -->
+          <a href="profile.html" class="user-avatar-pill" id="header-avatar-link" aria-label="Go to Profile">
+            <span id="header-avatar-initials">SC</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Side Navigation Drawer -->
+    <div class="drawer-backdrop hidden" id="drawer-overlay"></div>
+    <aside class="side-drawer" id="nav-drawer" aria-hidden="true">
+      <div class="drawer-top-profile">
+        <div class="drawer-avatar" id="drawer-avatar-initials">SC</div>
+        <div class="drawer-user-meta">
+          <h3 class="drawer-name" id="drawer-user-name">Selfcare Patient</h3>
+          <p class="drawer-phone" id="drawer-user-phone">+91 7010174890</p>
+        </div>
+        <button type="button" class="btn-drawer-close" id="btn-close-drawer" aria-label="Close Drawer">&times;</button>
+      </div>
+
+      <nav class="drawer-nav-list">
+        <a href="customer.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home Dashboard</span>
+        </a>
+        <a href="tests.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/><path d="M7 14h10"/></svg>
+          <span>Book Lab Tests</span>
+        </a>
+        <a href="packages.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M12 10.5v6"/><path d="M9 13.5h6"/></svg>
+          <span>Health Packages</span>
+        </a>
+        <a href="reports.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/></svg>
+          <span>My Test Reports</span>
+        </a>
+        <a href="checkout.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span>My Cart</span>
+        </a>
+        <a href="profile.html" class="drawer-nav-item active">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile &amp; Family Members</span>
+        </a>
+        <a href="ai-assistant.html" class="drawer-nav-item">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span>AI Health Explainer</span>
+        </a>
+
+        <div class="drawer-separator"></div>
+
+        <button type="button" class="drawer-nav-item drawer-logout-btn" id="btn-drawer-logout">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Sign Out</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Profile Page Content -->
+    <main class="customer-content" style="padding-top: 10px;">
+
+      <!-- SECTION 1: 3D Profile Hero Card -->
+      <section class="profile-hero-3d-card">
+        <div class="profile-hero-main">
+          <div class="profile-avatar-3d-wrapper">
+            <div class="profile-avatar-circle-3d" id="user-profile-avatar">SC</div>
+            <div class="avatar-shadow-ellipse"></div>
+          </div>
+          <div class="profile-hero-details">
+            <h1 class="profile-user-name" id="profile-display-name">Loading Profile...</h1>
+            <span class="profile-contact-line" id="profile-phone">--</span>
+            <span class="profile-contact-line" id="profile-email">--</span>
+            <span class="membership-badge">
+              <span>🛡️</span>
+              <span>Verified Patient Account</span>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Personal Profile Details Card -->
+      <section class="account-section-card">
+        <div class="section-card-header">
+          <div class="section-title-group">
+            <span class="section-icon">👤</span>
+            <div>
+              <h2 class="section-title">Personal Details</h2>
+              <p class="section-subtitle">Primary profile used for home sample collections</p>
+            </div>
+          </div>
+          <button type="button" class="btn-open-edit-profile" id="btn-open-edit-profile">
+            <span>✏️</span>
+            <span>Edit</span>
+          </button>
+        </div>
+
+        <div class="profile-details-grid-3d">
+          <div class="detail-row-item">
+            <div class="detail-icon">🏷️</div>
+            <div class="detail-content">
+              <span class="detail-label">Full Name</span>
+              <span class="detail-value" id="view-prof-name">--</span>
+            </div>
+          </div>
+
+          <div class="detail-row-item">
+            <div class="detail-icon">🎂</div>
+            <div class="detail-content">
+              <span class="detail-label">Age</span>
+              <span class="detail-value" id="view-prof-age">--</span>
+            </div>
+          </div>
+
+          <div class="detail-row-item">
+            <div class="detail-icon">⚧</div>
+            <div class="detail-content">
+              <span class="detail-label">Gender</span>
+              <span class="detail-value" id="view-prof-gender">--</span>
+            </div>
+          </div>
+
+          <div class="detail-row-item">
+            <div class="detail-icon">✉️</div>
+            <div class="detail-content">
+              <span class="detail-label">Email Address</span>
+              <span class="detail-value" id="view-prof-email">--</span>
+            </div>
+          </div>
+
+          <div class="detail-row-item">
+            <div class="detail-icon">🩸</div>
+            <div class="detail-content">
+              <span class="detail-label">Blood Group</span>
+              <span class="detail-value" id="view-prof-blood">--</span>
+            </div>
+          </div>
+
+          <div class="detail-row-item">
+            <div class="detail-icon">🏠</div>
+            <div class="detail-content">
+              <span class="detail-label">Registered Home Address</span>
+              <span class="detail-value" id="view-prof-address">--</span>
+            </div>
+          </div>
+
+          <!-- Added City & Pincode Views -->
+          <div class="detail-row-item">
+            <div class="detail-icon">🏙️</div>
+            <div class="detail-content">
+              <span class="detail-label">City</span>
+              <span class="detail-value" id="view-prof-city">--</span>
+            </div>
+          </div>
+
+          <div class="detail-row-item">
+            <div class="detail-icon">📮</div>
+            <div class="detail-content">
+              <span class="detail-label">Pincode</span>
+              <span class="detail-value" id="view-prof-pincode">--</span>
+            </div>
+          </div>
+
+          <div class="detail-row-item">
+            <div class="detail-icon">📍</div>
+            <div class="detail-content">
+              <span class="detail-label">GPS Geolocation</span>
+              <span class="detail-value" id="view-prof-location">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Family Members Card -->
+      <section class="account-section-card">
+        <div class="section-card-header">
+          <div class="section-title-group">
+            <span class="section-icon">👨‍👩‍👧‍👦</span>
+            <div>
+              <h2 class="section-title">Family &amp; Beneficiaries</h2>
+              <p class="section-subtitle">Add relatives to book diagnostic tests for them</p>
+            </div>
+          </div>
+          <button type="button" class="btn-add-member" id="btn-add-member">
+            <span>+</span>
+            <span>Add Member</span>
+          </button>
+        </div>
+
+        <div class="family-members-list-3d" id="family-members-container">
+          <!-- Rendered dynamically by profile.js -->
+        </div>
+      </section>
+
+      <!-- SECTION 4: Shortcut Banner To Tests & Packages -->
+      <section class="account-section-card booking-shortcut-banner">
+        <div class="booking-banner-content">
+          <div class="banner-icon-bubble">🧪</div>
+          <div>
+            <h3 class="section-title" style="margin-bottom: 2px;">Need a Diagnostic Test?</h3>
+            <p class="section-subtitle">Book individual tests or master health checkups</p>
+          </div>
+        </div>
+        <a href="tests.html" class="btn-3d-primary" style="text-decoration:none; white-space:nowrap; padding:8px 12px;">Browse Tests</a>
+      </section>
+
+      <!-- SECTION 5: Account Security / Logout -->
+      <section class="account-section-card" style="margin-bottom: 20px;">
+        <div class="section-card-header">
+          <div class="section-title-group">
+            <span class="section-icon">⚙️</span>
+            <div>
+              <h2 class="section-title">Account Security</h2>
+              <p class="section-subtitle">Manage device session</p>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-3d-secondary" id="btn-logout" style="width:100%; border-color:#fecaca; color:#ef4444; border-bottom-color:#dc2626;">
+          <span>🚪</span>
+          <span>Sign Out from Device</span>
+        </button>
+      </section>
+
+    </main>
+
+    <!-- SECTION 6: Fixed 3D Medical Bottom Navigation -->
+    <nav class="customer-bottom-nav">
+      <a href="customer.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="nav-item-label">Home</span>
+      </a>
+
+      <a href="tests.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6"/>
+          <path d="M10 3v5.5L5.6 16.2A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-2.8L14 8.5V3"/>
+          <path d="M7 14h10"/>
+        </svg>
+        <span class="nav-item-label">Tests</span>
+      </a>
+
+      <a href="packages.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          <rect x="3" y="7" width="18" height="13" rx="3"/>
+          <path d="M12 10.5v6"/>
+          <path d="M9 13.5h6"/>
+        </svg>
+        <span class="nav-item-label">Packages</span>
+      </a>
+
+      <a href="reports.html" class="nav-item">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <path d="M8 14h1.5l1.5-2.5 2 5 1.5-2.5H16"/>
+        </svg>
+        <span class="nav-item-label">Reports</span>
+      </a>
+
+      <a href="checkout.html" class="nav-item position-relative" id="bottom-cart-nav-link">
+        <div class="nav-icon-badge-box" id="bottom-cart-nav-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="nav-badge hidden" id="bottom-cart-badge">0</span>
+        </div>
+        <span class="nav-item-label">Cart</span>
+      </a>
+
+      <a href="profile.html" class="nav-item active">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="nav-item-label">Profile</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Edit Personal Profile Modal -->
+  <div class="modal-backdrop hidden" id="edit-profile-modal">
+    <div class="modal-card-bottom-sheet">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Personal Details</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-edit-profile" aria-label="Close">&times;</button>
+      </div>
+      <form id="profile-personal-form" class="modal-body-scroll">
+        <div class="form-group">
+          <label for="prof-name">Full Name *</label>
+          <input type="text" id="prof-name" class="form-control" placeholder="e.g. Mohamed Adamkani" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="prof-age">Age *</label>
+            <input type="number" id="prof-age" class="form-control" placeholder="27" min="1" max="120" required>
+          </div>
+          <div class="form-group">
+            <label for="prof-gender">Gender *</label>
+            <select id="prof-gender" class="form-control" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="prof-email">Email Address</label>
+            <input type="email" id="prof-email" class="form-control" placeholder="name@example.com">
+          </div>
+          <div class="form-group">
+            <label for="prof-blood">Blood Group</label>
+            <select id="prof-blood" class="form-control">
+              <option value="Unknown">Unknown</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="prof-address">Home Collection Address *</label>
+          <textarea id="prof-address" class="form-control" rows="2" placeholder="House No, Street, Area, Landmark" required></textarea>
+        </div>
+
+        <!-- Integrated City and Pincode -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="prof-city">City *</label>
+            <select id="prof-city" class="form-control" required>
+              <option value="Chennai">Chennai</option>
+              <option value="Tiruvannamalai">Tiruvannamalai</option>
+              <option value="Coimbatore">Coimbatore</option>
+              <option value="Madurai">Madurai</option>
+              <option value="Bengaluru">Bengaluru</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Kochi">Kochi</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="prof-pincode">Pincode *</label>
+            <input type="text" id="prof-pincode" class="form-control" placeholder="e.g. 600115" maxlength="6" pattern="[0-9]{6}" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label for="prof-location" style="margin-bottom:0;">GPS Coordinates (Lat, Lng)</label>
+            <button type="button" id="btn-get-location">
+              <span>📍</span>
+              <span>Detect GPS</span>
+            </button>
+          </div>
+          <input type="text" id="prof-location" class="form-control" placeholder="12.9249, 80.2520">
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" id="btn-cancel-edit-profile">Cancel</button>
+          <button type="submit">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Add / Edit Family Member Modal -->
+  <div class="modal-backdrop hidden" id="family-member-modal">
+    <div class="modal-card-bottom-sheet">
+      <div class="modal-header">
+        <h3 class="modal-title" id="family-modal-title">Add Family Member</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-family-modal" aria-label="Close">&times;</button>
+      </div>
+      <form id="profile-family-form" class="modal-body-scroll">
+        <input type="hidden" id="fam-edit-id">
+
+        <div class="form-group">
+          <label for="fam-member-name">Member Full Name *</label>
+          <input type="text" id="fam-member-name" class="form-control" placeholder="e.g. Jazeela" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="fam-member-age">Age *</label>
+            <input type="number" id="fam-member-age" class="form-control" placeholder="26" min="1" max="120" required>
+          </div>
+          <div class="form-group">
+            <label for="fam-member-gender">Gender *</label>
+            <select id="fam-member-gender" class="form-control" required>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="fam-member-relation">Relationship *</label>
+            <select id="fam-member-relation" class="form-control" required>
+              <option value="Spouse">Spouse</option>
+              <option value="Father">Father</option>
+              <option value="Mother">Mother</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Brother">Brother</option>
+              <option value="Sister">Sister</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fam-member-blood">Blood Group</label>
+            <select id="fam-member-blood" class="form-control">
+              <option value="Unknown">Unknown</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fam-member-email">Email (Optional)</label>
+          <input type="email" id="fam-member-email" class="form-control" placeholder="relative@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="fam-member-address">Address (Leave blank if same as yours)</label>
+          <textarea id="fam-member-address" class="form-control" rows="2" placeholder="Leave blank if residing at same address"></textarea>
+        </div>
+
+        <!-- Integrated City and Pincode for Family Member -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="fam-member-city">City</label>
+            <select id="fam-member-city" class="form-control">
+              <option value="">Same as Primary</option>
+              <option value="Chennai">Chennai</option>
+              <option value="Tiruvannamalai">Tiruvannamalai</option>
+              <option value="Coimbatore">Coimbatore</option>
+              <option value="Madurai">Madurai</option>
+              <option value="Bengaluru">Bengaluru</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Kochi">Kochi</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fam-member-pincode">Pincode</label>
+            <input type="text" id="fam-member-pincode" class="form-control" placeholder="e.g. 600115" maxlength="6" pattern="[0-9]{6}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label for="fam-member-location" style="margin-bottom:0;">GPS Coordinates</label>
+            <button type="button" id="btn-get-fam-location">
+              <span>📍</span>
+              <span>Detect GPS</span>
+            </button>
+          </div>
+          <input type="text" id="fam-member-location" class="form-control" placeholder="12.9249, 80.2520">
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="submit">Save Family Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Location Picker Modal -->
+  <div class="modal-backdrop hidden" id="location-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Your City</h3>
+        <button type="button" class="modal-close" id="btn-close-location-modal" aria-label="Close location modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="location-search-box">
+          <input type="text" id="city-search-input" class="form-control" placeholder="Search city name...">
+        </div>
+        <div class="popular-cities-grid">
+          <button type="button" class="city-btn active" data-city="Chennai"><span class="city-name">Chennai</span></button>
+          <button type="button" class="city-btn" data-city="Tiruvannamalai"><span class="city-name">Tiruvannamalai</span></button>
+          <button type="button" class="city-btn" data-city="Coimbatore"><span class="city-name">Coimbatore</span></button>
+          <button type="button" class="city-btn" data-city="Madurai"><span class="city-name">Madurai</span></button>
+          <button type="button" class="city-btn" data-city="Bengaluru"><span class="city-name">Bengaluru</span></button>
+          <button type="button" class="city-btn" data-city="Hyderabad"><span class="city-name">Hyderabad</span></button>
+          <button type="button" class="city-btn" data-city="Kochi"><span class="city-name">Kochi</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Notifications Modal -->
+  <div class="modal-backdrop hidden" id="notifications-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Notifications</h3>
+        <button type="button" class="modal-close" id="btn-close-notif-modal" aria-label="Close notifications modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="notif-item" data-notif-id="notif_discount_10">
+          <span class="notif-dot green"></span>
+          <div class="notif-text">
+            <strong>10% Online Payment Discount Active</strong>
+            <p>Pay online using UPI or Cards to get 10% instant discount.</p>
+          </div>
+        </div>
+        <div class="notif-item" data-notif-id="notif_slot_confirmed">
+          <span class="notif-dot blue"></span>
+          <div class="notif-text">
+            <strong>Home Collection Slot Confirmed</strong>
+            <p>Phlebotomist will arrive on schedule for doorstep sample collection.</p>
+          </div>
+        </div>
+        <div class="notif-item" data-notif-id="notif_reports_ready">
+          <span class="notif-dot pink"></span>
+          <div class="notif-text">
+            <strong>Master Health Checkup Reports Ready</strong>
+            <p>Your digital report is generated. Download PDF in My Reports.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Banner -->
+  <div class="toast-banner hidden" id="customer-toast" role="status" aria-live="polite">
+    <span id="toast-message">Message</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/profile.js"></script>
+</body>
+</html>

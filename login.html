@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#009963">
+  <meta name="description" content="Sign in to Selfcare Diagnostics - Empowering Wellness through accurate tests, fast reports, and doorstep sample collection.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Selfcare">
+
+  <title>Login | Selfcare Diagnostics</title>
+
+  <!-- Favicon & Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body class="auth-body">
+
+  <!-- Ambient Floating Background Lights -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <main class="auth-container">
+
+    <!-- 1. Top Right Language Selector Pill -->
+    <div class="top-nav-bar">
+      <div class="language-pill">
+        <svg class="lang-globe-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <select id="language-select" class="language-select" aria-label="Select Language">
+          <option value="en" selected>English</option>
+          <option value="ta">தமிழ்</option>
+          <option value="hi">हिन्दी</option>
+          <option value="te">తెలుగు</option>
+          <option value="ml">മലയാളം</option>
+        </select>
+        <svg class="lang-chevron-icon" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- 2. Official Brand Logo -->
+    <header class="auth-header">
+      <div class="logo-wrapper">
+        <img
+          class="official-logo"
+          src="assets/images/logo.png"
+          alt="Selfcare Diagnostics - Empowering Wellness"
+        >
+      </div>
+    </header>
+
+    <!-- 3. Main Auth Card -->
+    <div class="auth-card">
+
+      <!-- Navigation Tabs: Sign In / Create Account -->
+      <nav class="auth-tabs" role="tablist" aria-label="Authentication Tabs">
+        <button type="button" class="auth-tab active" id="tab-login" role="tab" aria-selected="true" data-target="login-form-wrapper">
+          <span id="tab-login-text">Sign In</span>
+          <div class="tab-indicator"></div>
+        </button>
+        <button type="button" class="auth-tab" id="tab-register" role="tab" aria-selected="false" data-target="register-form-wrapper">
+          <span id="tab-register-text">Create Account</span>
+          <div class="tab-indicator"></div>
+        </button>
+      </nav>
+
+      <!-- Global Feedback Notification Banner -->
+      <div id="auth-alert" class="auth-alert hidden" role="alert" aria-live="polite">
+        <span class="alert-icon" id="alert-icon"></span>
+        <span class="alert-text" id="alert-text"></span>
+      </div>
+
+      <!-- ================= SIGN IN TAB VIEW ================= -->
+      <section id="login-form-wrapper" class="auth-form-wrapper" role="tabpanel" aria-labelledby="tab-login">
+        <div class="auth-welcome">
+          <h1 class="welcome-title" id="welcome-login-title">
+            Welcome Back <span class="sparkle-icon">✦</span>
+          </h1>
+          <p class="welcome-subtitle" id="welcome-login-subtitle">Access your diagnostics reports, bookings, and health records.</p>
+        </div>
+
+        <form id="login-form" method="POST" class="auth-form" novalidate>
+          
+          <!-- User ID / Mobile / Email -->
+          <div class="form-group">
+            <label for="login-identifier" class="input-label" id="label-login-identifier">User ID / Mobile / Email</label>
+            <div class="input-wrapper">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </span>
+              <input 
+                type="text" 
+                id="login-identifier" 
+                name="username" 
+                class="form-control" 
+                placeholder="User ID / Mobile / Email" 
+                autocomplete="username" 
+                required 
+                autocapitalize="none"
+                spellcheck="false"
+              >
+            </div>
+            <span class="field-error" id="error-login-identifier"></span>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <div class="label-row">
+              <label for="login-password" class="input-label" id="label-login-password">Password</label>
+              <button type="button" class="btn-text-link" id="btn-open-forgot">Forgot Password?</button>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </span>
+              <input 
+                type="password" 
+                id="login-password" 
+                name="password" 
+                class="form-control" 
+                placeholder="Enter password" 
+                autocomplete="current-password" 
+                required
+              >
+              <button type="button" class="btn-toggle-password" id="toggle-login-password" aria-label="Toggle password visibility">
+                <svg class="eye-open" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="eye-closed hidden" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              </button>
+            </div>
+            <span class="field-error" id="error-login-password"></span>
+          </div>
+
+          <!-- Keep Signed In Checkbox -->
+          <div class="form-row-between">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="login-remember" name="remember" checked>
+              <span class="checkmark"></span>
+              <span class="checkbox-text" id="label-login-remember">Keep me signed in</span>
+            </label>
+          </div>
+
+          <!-- 3D Login Button -->
+          <button type="submit" class="btn-login" id="btn-login-submit">
+            <span class="btn-login-content">
+              <svg class="btn-lock-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <span class="btn-text" id="btn-login-text">Login</span>
+              <span class="btn-spinner hidden"></span>
+            </span>
+            <div class="btn-radial-spot"></div>
+            <div class="btn-sweep-light"></div>
+          </button>
+
+          <!-- Switch to Registration Link -->
+          <div class="switch-flow-text">
+            <span id="prompt-no-account">Don't have an account?</span> <a href="#" id="link-create-account" class="highlight-link">Create Account</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- ================= CREATE ACCOUNT TAB VIEW ================= -->
+      <section id="register-form-wrapper" class="auth-form-wrapper hidden" role="tabpanel" aria-labelledby="tab-register">
+        <div class="auth-welcome">
+          <h2 class="welcome-title" id="welcome-register-title">
+            Create Account <span class="sparkle-icon">✦</span>
+          </h2>
+          <p class="welcome-subtitle" id="welcome-register-subtitle">Register to book diagnostic tests & access digital reports.</p>
+        </div>
+
+        <form id="register-form" method="POST" class="auth-form reg-compact-form" novalidate>
+          
+          <!-- Row 1: Full Name -->
+          <div class="form-group">
+            <label for="reg-name" class="input-label" id="label-reg-name">Full Name *</label>
+            <div class="input-wrapper">
+              <input type="text" id="reg-name" name="name" class="form-control" placeholder="Enter full name" autocomplete="name" required>
+            </div>
+            <span class="field-error" id="error-reg-name"></span>
+          </div>
+
+          <!-- Row 2: Mobile Number & Blood Group -->
+          <div class="form-grid-2 form-grid-phone-blood">
+            <div class="form-group">
+              <label for="reg-mobile" class="input-label" id="label-reg-mobile">Mobile Number *</label>
+              <div class="input-wrapper input-wrapper-phone">
+                <span class="phone-prefix">+91</span>
+                <input type="tel" id="reg-mobile" name="tel" class="form-control phone-control" placeholder="10-digit mobile" maxlength="10" required>
+              </div>
+              <span class="field-error" id="error-reg-mobile"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-blood-group" class="input-label" id="label-reg-blood-group">Blood Group</label>
+              <div class="input-wrapper">
+                <select id="reg-blood-group" name="blood_group" class="form-control form-select">
+                  <option value="" selected>Select</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Email Address & Date of Birth -->
+          <div class="form-grid-2 form-grid-email-dob">
+            <div class="form-group">
+              <label for="reg-email" class="input-label" id="label-reg-email">Email Address *</label>
+              <div class="input-wrapper">
+                <input type="email" id="reg-email" name="email" class="form-control" placeholder="name@example.com" autocomplete="email" required autocapitalize="none">
+              </div>
+              <span class="field-error" id="error-reg-email"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-dob" class="input-label" id="label-reg-dob">Date of Birth *</label>
+              <div class="input-wrapper">
+                <input type="date" id="reg-dob" name="bday" class="form-control form-control-date" required>
+              </div>
+              <span class="field-error" id="error-reg-dob"></span>
+            </div>
+          </div>
+
+          <!-- Row 4: Create Password & Confirm Password -->
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="reg-password" class="input-label" id="label-reg-password">Create Password *</label>
+              <div class="input-wrapper">
+                <input type="password" id="reg-password" name="new-password" class="form-control form-control-pass" placeholder="Min 8 chars" autocomplete="new-password" required>
+                <button type="button" class="btn-toggle-password" id="toggle-reg-password" aria-label="Toggle password">
+                  <svg class="eye-open" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="eye-closed hidden" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              <span class="field-error" id="error-reg-password"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-confirm-password" class="input-label" id="label-reg-confirm-password">Confirm Password *</label>
+              <div class="input-wrapper">
+                <input type="password" id="reg-confirm-password" name="confirm-password" class="form-control form-control-pass" placeholder="Re-enter" autocomplete="new-password" required>
+                <button type="button" class="btn-toggle-password" id="toggle-reg-confirm-password" aria-label="Toggle password">
+                  <svg class="eye-open" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="eye-closed hidden" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              <span class="field-error" id="error-reg-confirm-password"></span>
+            </div>
+          </div>
+
+          <!-- Create Account Submit Button -->
+          <button type="submit" class="btn-login" id="btn-register-submit">
+            <span class="btn-login-content">
+              <span class="btn-text" id="btn-register-text">Create Account</span>
+              <span class="btn-spinner hidden"></span>
+            </span>
+            <div class="btn-sweep-light"></div>
+          </button>
+
+          <!-- Switch to Login Link -->
+          <div class="switch-flow-text">
+            <span id="prompt-already-account">Already have an account?</span> <a href="#" id="link-sign-in" class="highlight-link">Sign In</a>
+          </div>
+        </form>
+      </section>
+
+    </div>
+
+    <!-- ================= 4. WHY CHOOSE SELFCARE? ================= -->
+    <section class="why-choose-card">
+      <div class="why-choose-header">
+        <span class="line-decorator"></span>
+        <h2 class="why-choose-title" id="why-choose-title">WHY CHOOSE SELFCARE?</h2>
+        <span class="line-decorator"></span>
+      </div>
+
+      <div class="why-features-grid">
+        <!-- Feature 1: NABL Accredited -->
+        <div class="feature-item">
+          <div class="feature-icon-box green-tint">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="8" r="6" />
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+            </svg>
+          </div>
+          <span class="feature-label" id="feat-label-nabl">NABL<br>Accredited</span>
+        </div>
+
+        <!-- Feature 2: Home Collection -->
+        <div class="feature-item">
+          <div class="feature-icon-box green-tint">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </div>
+          <span class="feature-label" id="feat-label-home">Home<br>Collection</span>
+        </div>
+
+        <!-- Feature 3: 24/7 Customer Service (Styled Pink Badge) -->
+        <div class="feature-item">
+          <div class="feature-icon-box pink-tint">
+            <span class="feature-247-badge">24/7</span>
+          </div>
+          <span class="feature-label" id="feat-label-support">24/7<br>Customer Service</span>
+        </div>
+
+        <!-- Feature 4: WhatsApp Enquiry (Official WhatsApp Icon) -->
+        <div class="feature-item">
+          <div class="feature-icon-box green-tint">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+            </svg>
+          </div>
+          <span class="feature-label" id="feat-label-whatsapp">WhatsApp<br>Enquiry</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. CONTACT ACTION BUTTONS ================= -->
+    <div class="contact-actions-row">
+      <!-- WhatsApp CTA -->
+      <button type="button" class="contact-card card-whatsapp" id="btn-whatsapp-action">
+        <div class="contact-icon-bubble wa-glow">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2ZM12.04 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.59 20.16 12.05 20.16C10.61 20.16 9.2 19.78 7.96 19.04L7.67 18.87L4.55 19.69L5.38 16.65L5.19 16.34C4.38 15.06 3.8 13.51 3.8 11.92C3.8 7.37 7.5 3.67 12.04 3.67ZM8.73 7.39C8.54 7.39 8.23 7.46 7.98 7.73C7.73 8 7.02 8.67 7.02 10.02C7.02 11.38 8.01 12.69 8.14 12.87C8.28 13.06 10.08 15.83 12.84 17.02C13.5 17.3 14.01 17.47 14.41 17.6C15.07 17.81 15.68 17.78 16.15 17.71C16.68 17.63 17.77 17.05 18 16.4C18.23 15.75 18.23 15.2 18.16 15.08C18.09 14.96 17.91 14.89 17.63 14.75C17.35 14.61 15.99 13.94 15.74 13.85C15.48 13.75 15.3 13.71 15.11 13.99C14.92 14.26 14.39 14.89 14.23 15.08C14.07 15.26 13.91 15.28 13.63 15.14C13.35 15.01 12.46 14.71 11.4 13.77C10.58 13.04 10.02 12.14 9.86 11.86C9.7 11.59 9.84 11.44 9.98 11.3C10.11 11.17 10.27 10.96 10.41 10.8C10.55 10.63 10.6 10.51 10.69 10.33C10.78 10.15 10.74 9.99 10.67 9.85C10.6 9.71 10.04 8.35 9.81 7.79C9.58 7.25 9.35 7.32 9.18 7.31C9.02 7.31 8.88 7.39 8.73 7.39Z"/>
+          </svg>
+        </div>
+        <div class="contact-text-meta">
+          <div class="contact-title" id="contact-wa-title">WhatsApp Enquiry</div>
+          <div class="contact-desc" id="contact-wa-desc">Chat with us instantly</div>
+        </div>
+        <svg class="chevron-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+
+      <!-- 24/7 Support CTA -->
+      <button type="button" class="contact-card card-support" id="btn-support-action">
+        <div class="contact-icon-bubble support-glow">
+          <span class="support-micro-badge">24/7</span>
+        </div>
+        <div class="contact-text-meta">
+          <div class="contact-title" id="contact-support-title">24/7 Support</div>
+          <div class="contact-desc" id="contact-support-desc">Always here to help</div>
+        </div>
+        <svg class="chevron-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- ================= 6. COMPACT FOOTER ================= -->
+    <footer class="auth-footer">
+      <div class="secure-badge">
+        <svg class="secure-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+        <span id="secure-text">Your data is secure with us</span>
+      </div>
+      <div class="copyright-text" id="copyright-text">
+        &copy; 2026 SELFCARE DIAGNOSTICS. All rights reserved.
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ================= 7. REGISTRATION OTP VERIFICATION MODAL ================= -->
+  <div class="modal-backdrop hidden" id="register-otp-modal" role="dialog" aria-modal="true" aria-labelledby="reg-otp-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="reg-otp-title">Verify Mobile Number</h3>
+        <button type="button" class="modal-close" id="btn-close-reg-otp" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-description">
+          <span id="reg-otp-desc-text">We have sent a 6-digit verification code to</span> <strong id="reg-otp-mobile-display">+91 XXXXXXXXXX</strong>.
+        </p>
+
+        <div class="form-group">
+          <label for="reg-otp-input" class="input-label" id="label-reg-otp">Enter 6-Digit OTP</label>
+          <input 
+            type="tel" 
+            id="reg-otp-input" 
+            class="form-control otp-input-large" 
+            placeholder="••••••" 
+            maxlength="6" 
+            autocomplete="one-time-code"
+          >
+          <span class="field-error" id="error-reg-otp"></span>
+        </div>
+
+        <div class="resend-countdown-row">
+          <span id="reg-otp-timer">Resend OTP in 30s</span>
+          <button type="button" class="btn-text-link" id="btn-resend-reg-otp" disabled>Resend Code</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-reg-otp">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-verify-reg-otp">
+          <span class="btn-text" id="btn-verify-reg-otp-text">Verify &amp; Create Account</span>
+          <span class="btn-spinner hidden"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 8. FORGOT PASSWORD MODAL ================= -->
+  <div class="modal-backdrop hidden" id="forgot-password-modal" role="dialog" aria-modal="true" aria-labelledby="forgot-modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="forgot-modal-title">Reset Password</h3>
+        <button type="button" class="modal-close" id="btn-close-forgot-modal" aria-label="Close modal">&times;</button>
+      </div>
+
+      <!-- Step 1: Request OTP -->
+      <div class="modal-body" id="forgot-step-1">
+        <p class="modal-description" id="forgot-step-1-desc">
+          Enter your registered 10-digit mobile number. We will send a secure verification code to reset your password.
+        </p>
+        <div class="form-group">
+          <label for="forgot-mobile" class="input-label" id="label-forgot-mobile">Registered Mobile Number</label>
+          <div class="input-wrapper input-wrapper-phone">
+            <span class="phone-prefix">+91</span>
+            <input 
+              type="tel" 
+              id="forgot-mobile" 
+              class="form-control phone-control" 
+              placeholder="10-digit mobile number" 
+              maxlength="10" 
+              autocomplete="tel"
+            >
+          </div>
+          <span class="field-error" id="error-forgot-mobile"></span>
+        </div>
+        <div class="modal-actions-right">
+          <button type="button" class="btn btn-primary btn-block" id="btn-send-forgot-otp">
+            <span class="btn-text" id="btn-send-forgot-otp-text">Send Verification Code</span>
+            <span class="btn-spinner hidden"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Verify OTP and Set New Password -->
+      <div class="modal-body hidden" id="forgot-step-2">
+        <p class="modal-description">
+          <span id="forgot-step-2-desc-prefix">Enter the OTP sent to</span> <strong id="forgot-mobile-display">+91 XXXXXXXXXX</strong> <span id="forgot-step-2-desc-suffix">and choose a new password.</span>
+        </p>
+
+        <div class="form-group">
+          <label for="forgot-otp-input" class="input-label" id="label-forgot-otp">6-Digit OTP</label>
+          <input 
+            type="tel" 
+            id="forgot-otp-input" 
+            class="form-control otp-input-large" 
+            placeholder="••••••" 
+            maxlength="6" 
+            autocomplete="one-time-code"
+          >
+          <span class="field-error" id="error-forgot-otp"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="forgot-new-password" class="input-label" id="label-forgot-new-password">New Password</label>
+          <input 
+            type="password" 
+            id="forgot-new-password" 
+            class="form-control" 
+            placeholder="Min 8 characters (letters & numbers)" 
+            autocomplete="new-password"
+          >
+          <span class="field-error" id="error-forgot-new-password"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="forgot-confirm-password" class="input-label" id="label-forgot-confirm-password">Confirm New Password</label>
+          <input 
+            type="password" 
+            id="forgot-confirm-password" 
+            class="form-control" 
+            placeholder="Re-enter new password" 
+            autocomplete="new-password"
+          >
+          <span class="field-error" id="error-forgot-confirm-password"></span>
+        </div>
+
+        <div class="resend-countdown-row">
+          <span id="forgot-otp-timer">Resend OTP in 30s</span>
+          <button type="button" class="btn-text-link" id="btn-resend-forgot-otp" disabled>Resend Code</button>
+        </div>
+
+        <div class="modal-actions-right">
+          <button type="button" class="btn btn-primary btn-block" id="btn-submit-reset-password">
+            <span class="btn-text" id="btn-submit-reset-password-text">Reset Password</span>
+            <span class="btn-spinner hidden"></span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/login.js"></script>
+</body>
+</html>
